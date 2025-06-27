@@ -1,0 +1,390 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a//dev/null b/style.css
+index 0000000000000000000000000000000000000000..d30edaf5f2744c75ba30e240b869a1dbb5aef4b0 100644
+--- a//dev/null
++++ b/style.css
+@@ -0,0 +1,381 @@
++<!-- style.css -->
++<!-- Styles for ticket creator page. -->
++<!-- Not for JS or backend logic. -->
++        :root {
++            --primary-color: #4a90e2;
++            --secondary-color: #50e3c2;
++            --text-color: #333;
++            --background-color: #f0f3f5;
++            --night-primary-color: #7b68ee;
++            --night-secondary-color: #00ff9d;
++            --night-text-color: #e0e0e0;
++            --night-background-color: #1a1a2e;
++        }
++
++        body {
++            font-family: 'Roboto', sans-serif;
++            background-color: var(--background-color);
++            color: var(--text-color);
++            margin: 0;
++            padding: 0;
++            transition: all 0.3s ease;
++        }
++
++        .container {
++            max-width: 100%;
++            margin: 0 auto;
++            padding: 20px;
++        }
++
++        header {
++            background-color: var(--primary-color);
++            color: white;
++            text-align: center;
++            padding: 20px 0;
++            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
++        }
++
++        h1, h2 {
++            margin: 0;
++        }
++
++        .ticket-creator {
++            display: flex;
++            flex-direction: column;
++            align-items: center;
++            margin-top: 30px;
++        }
++
++        .ticket-preview {
++            width: 100%;
++            max-width: 1000px;
++            background-color: white;
++            border-radius: 15px;
++            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
++            padding: 20px;
++            margin-bottom: 30px;
++            overflow: hidden;
++        }
++
++        .ticket {
++            width: 100%;
++            min-height: 280px;
++            position: relative;
++            overflow: hidden;
++            border-radius: 10px;
++            transition: all 0.3s ease;
++            resize: vertical;
++            min-width: 400px;
++            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
++        }
++
++        .ticket-background {
++            position: absolute;
++            top: 0;
++            left: 0;
++            width: 100%;
++            height: 100%;
++            object-fit: cover;
++            opacity: 0.2;
++            z-index: 1;
++            transition: opacity 0.3s ease, transform 0.3s ease;
++        }
++
++        .ticket-content {
++            position: relative;
++            z-index: 2;
++            height: 100%;
++            padding: 20px;
++            box-sizing: border-box;
++        }
++
++        .text-block {
++            position: absolute;
++            background: transparent;
++            border: 1px dashed #ccc;
++            padding: 2px;
++            cursor: move;
++            display: inline-block;
++        }
++
++        .text-block:hover {
++            border-color: var(--primary-color);
++        }
++
++        .text-block-content {
++            border: none;
++            background: transparent;
++            resize: none;
++            outline: none;
++            font-family: inherit;
++            color: inherit;
++            overflow: hidden;
++            padding: 0;
++            margin: 0;
++            width: auto;
++            min-width: 10px;
++            min-height: 10px;
++            text-transform: uppercase;
++            white-space: nowrap;
++        }
++
++        .ticket-controls {
++            width: 100%;
++            max-width: 1000px;
++        }
++
++        .control-group {
++            margin-bottom: 20px;
++            background-color: rgba(255,255,255,0.1);
++            padding: 15px;
++            border-radius: 10px;
++            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
++        }
++
++        label {
++            display: inline-block;
++            margin-right: 5px;
++            font-weight: bold;
++        }
++
++        input[type="text"], input[type="file"], input[type="number"], input[type="range"], select {
++            padding: 8px;
++            border-radius: 5px;
++            border: 1px solid #ccc;
++            box-sizing: border-box;
++            background-color: rgba(255,255,255,0.8);
++            transition: all 0.3s ease;
++        }
++
++        input[type="text"]:focus, input[type="file"]:focus, input[type="number"]:focus, input[type="range"]:focus, select:focus {
++            outline: none;
++            box-shadow: 0 0 5px var(--primary-color);
++        }
++
++        button {
++            background-color: var(--secondary-color);
++            color: white;
++            border: none;
++            padding: 10px 20px;
++            border-radius: 5px;
++            cursor: pointer;
++            transition: background-color 0.3s ease, transform 0.1s ease;
++            margin-right: 10px;
++        }
++
++        button:hover {
++            background-color: #3dd1a8;
++            transform: translateY(-2px);
++        }
++
++        button:active {
++            transform: translateY(0);
++        }
++
++        .image-controls, .text-controls {
++            display: flex;
++            flex-wrap: wrap;
++            justify-content: space-between;
++            align-items: center;
++            margin-top: 10px;
++        }
++
++        .image-controls input[type="number"], .text-controls input[type="number"] {
++            width: 60px;
++        }
++
++        .color-picker {
++            width: 50px;
++            height: 30px;
++            padding: 0;
++            border: none;
++            border-radius: 15px;
++            overflow: hidden;
++            cursor: pointer;
++        }
++
++        .button-group {
++            display: flex;
++            justify-content: space-between;
++            margin-top: 20px;
++        }
++
++        .text-block-controls {
++            display: none;
++            position: absolute;
++            background: rgba(255,255,255,0.9);
++            border: 1px solid #ccc;
++            padding: 5px;
++            z-index: 10;
++            top: 100%;
++            left: 0;
++            width: 125px;
++            font-size: 0.5em;
++            border-radius: 5px;
++            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
++        }
++
++        .text-block.active .text-block-controls {
++            display: block;
++        }
++
++        .delete-text-block {
++            background-color: #ff4757;
++        }
++
++        .delete-text-block:hover {
++            background-color: #ff6b81;
++        }
++
++        .align-buttons, .text-style-buttons {
++            display: flex;
++            justify-content: space-between;
++            margin-bottom: 5px;
++        }
++
++        .align-left, .align-center, .align-right, .uppercase-text, .lowercase-text, .toggle-bold, .lock-position, .toggle-vertical {
++            padding: 2px 5px;
++            background-color: #f1f1f1;
++            border: none;
++            cursor: pointer;
++            flex-grow: 1;
++            margin: 0 1px;
++            font-size: 0.5em;
++            border-radius: 3px;
++        }
++
++        .align-left:hover, .align-center:hover, .align-right:hover,
++        .uppercase-text:hover, .lowercase-text:hover, .toggle-bold:hover, .lock-position:hover, .toggle-vertical:hover {
++            background-color: #ddd;
++        }
++
++        .rotate-control {
++            display: flex;
++            justify-content: space-between;
++            align-items: center;
++            margin-top: 2px;
++        }
++
++        .rotate-button {
++            padding: 2px 5px;
++            background-color: #f1f1f1;
++            border: none;
++            cursor: pointer;
++            font-size: 0.5em;
++            border-radius: 3px;
++        }
++
++        .rotate-button:hover {
++            background-color: #ddd;
++        }
++
++        #clearAllText {
++            background-color: #ff4757;
++            color: white;
++            margin-top: 10px;
++        }
++
++        #clearAllText:hover {
++            background-color: #ff6b81;
++        }
++
++        @media (max-width: 400px) {
++            .ticket {
++                transform: scale(0.8);
++                transform-origin: top left;
++            }
++        }
++
++        .text-controls-row, .image-controls-row {
++            display: flex;
++            justify-content: space-between;
++            align-items: center;
++            margin-bottom: 10px;
++        }
++
++        .text-controls-row > *, .image-controls-row > * {
++            margin-right: 10px;
++        }
++
++        .text-controls-row > *:last-child, .image-controls-row > *:last-child {
++            margin-right: 0;
++        }
++
++        .text-block-controls input[type="number"],
++        .text-block-controls input[type="range"] {
++            width: 30px;
++            height: 15px;
++            font-size: 0.5em;
++        }
++
++        .text-block-controls label {
++            font-size: 0.5em;
++        }
++
++        .text-block-controls .color-picker {
++            width: 25px;
++            height: 15px;
++        }
++
++        /* Night mode styles */
++        body.night-mode {
++            background-color: var(--night-background-color);
++            color: var(--night-text-color);
++        }
++
++        body.night-mode header {
++            background-color: var(--night-primary-color);
++        }
++
++        body.night-mode .ticket {
++            background: linear-gradient(135deg, #2a2a3a 0%, #1a1a2e 100%);
++        }
++
++        body.night-mode .text-block-controls {
++            background: rgba(26,26,46,0.9);
++            border-color: #444;
++        }
++
++        body.night-mode input[type="text"], 
++        body.night-mode input[type="file"], 
++        body.night-mode input[type="number"], 
++        body.night-mode input[type="range"], 
++        body.night-mode select {
++            background-color: rgba(255,255,255,0.1);
++            color: var(--night-text-color);
++            border-color: #444;
++        }
++
++        body.night-mode button {
++            background-color: var(--night-secondary-color);
++            color: #1a1a2e;
++        }
++
++        body.night-mode button:hover {
++            background-color: #00cc7d;
++        }
++
++        body.night-mode .align-left, 
++        body.night-mode .align-center, 
++        body.night-mode .align-right, 
++        body.night-mode .uppercase-text, 
++        body.night-mode .lowercase-text, 
++        body.night-mode .toggle-bold, 
++        body.night-mode .lock-position, 
++        body.night-mode .toggle-vertical,
++        body.night-mode .rotate-button {
++            background-color: #2a2a3a;
++            color: var(--night-text-color);
++        }
++
++        body.night-mode .align-left:hover, 
++        body.night-mode .align-center:hover, 
++        body.night-mode .align-right:hover,
++        body.night-mode .uppercase-text:hover, 
++        body.night-mode .lowercase-text:hover, 
++        body.night-mode .toggle-bold:hover, 
++        body.night-mode .lock-position:hover, 
++        body.night-mode .toggle-vertical:hover,
++        body.night-mode .rotate-button:hover {
++            background-color: #3a3a4a;
++        }
+ 
+EOF
+)
