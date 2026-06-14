@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project View | Kyle Robinson</title>
+  <script>
+    (function () {
+      try {
+        document.documentElement.dataset.displayMode = window.localStorage.getItem("portfolio-display-mode") || "orbit";
+      } catch (error) {
+        document.documentElement.dataset.displayMode = "orbit";
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="view-project.css">
+</head>
+<body class="view-project-body">
+  <div id="project-bubbles" aria-hidden="true"></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="vp-badge-app" viewBox="0 0 16 16">
+        <rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2.3" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M5 5.1h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="vp-badge-print" viewBox="0 0 16 16">
+        <path d="M4.4 5.1V2.9h7.2v2.2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+        <rect x="3.1" y="6.1" width="9.8" height="4.4" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M4.7 10.5h6.6v2.6H4.7z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="vp-badge-layout" viewBox="0 0 16 16">
+        <rect x="2.5" y="2.5" width="11" height="11" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M5.5 2.9v10.2M10.5 2.9v10.2M2.9 6h10.2" fill="none" stroke="currentColor" stroke-width="1.1"></path>
+      </symbol>
+      <symbol id="vp-badge-vector" viewBox="0 0 16 16">
+        <circle cx="4.1" cy="11.7" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <circle cx="12" cy="4.1" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <circle cx="12.1" cy="11.8" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <path d="M5.3 10.8l5.5-5.7M5.6 11.3h4.9" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="vp-badge-photo" viewBox="0 0 16 16">
+        <rect x="2.4" y="3.1" width="11.2" height="9.8" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <circle cx="6" cy="6.5" r="1.2" fill="none" stroke="currentColor" stroke-width="1.1"></circle>
+        <path d="M4.4 11l2.5-2.6 1.7 1.7 1.4-1.4 1.6 2.3" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="vp-badge-code" viewBox="0 0 16 16">
+        <path d="M6.1 4.3L2.9 8l3.2 3.7M9.9 4.3L13.1 8l-3.2 3.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="vp-badge-motion" viewBox="0 0 16 16">
+        <path d="M2.5 9.6c1.2-2 2.3-3 3.5-3s2.1.9 3.2 2.1c1.1 1.2 1.9 1.8 3 1.8.6 0 1.2-.2 1.8-.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+        <path d="M2.5 6.6c1.2-2 2.3-3 3.5-3s2.1.9 3.2 2.1c1.1 1.2 1.9 1.8 3 1.8.6 0 1.2-.2 1.8-.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.72"></path>
+      </symbol>
+      <symbol id="vp-badge-cube" viewBox="0 0 16 16">
+        <path d="M8 2.6l4.8 2.7v5.4L8 13.4l-4.8-2.7V5.3L8 2.6z" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"></path>
+        <path d="M8 2.8v10.3M3.4 5.5L8 8l4.6-2.5" fill="none" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main class="project-shell">
+    <nav class="project-topbar" aria-label="Project navigation">
+      <a href="homepage-orbit-goal1.html">Back to orbit</a>
+      <a href="motivation-cards-lab.html">Open quote lab</a>
+      <button class="project-mode-toggle" type="button" aria-pressed="false" aria-label="Switch to day mode">Day Mode</button>
+    </nav>
+
+    <section class="project-hero">
+      <div class="panel project-copy-panel">
+        <p class="project-kicker" id="project-kicker">Featured / Project View</p>
+        <h1 id="project-title">Unclaimed Remains Brochure</h1>
+        <p class="project-summary" id="project-summary">An informational brochure concept that balances sensitivity, clarity, and public-facing guidance.</p>
+        <div class="project-badges" id="project-badges" aria-label="Project tools and process"></div>
+      </div>
+
+      <aside class="panel project-fact-panel">
+        <p class="project-kicker">At a glance</p>
+        <dl class="fact-grid">
+          <div>
+            <dt>Project type</dt>
+            <dd id="fact-type">Editorial system</dd>
+          </div>
+          <div>
+            <dt>Primary mode</dt>
+            <dd id="fact-mode">Print / Information design</dd>
+          </div>
+          <div>
+            <dt>Read through</dt>
+            <dd id="fact-read">Selected work / case study / process</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd id="fact-status">Live structure / ready for content</dd>
+          </div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="project-grid">
+      <article class="panel spread spread-wide">
+        <p class="spread-eyebrow">Project frame</p>
+        <h2>What this page should communicate</h2>
+        <p id="project-frame-copy">This project page should explain the design problem, the chosen system, and the logic behind the final output without losing the atmosphere of the homepage.</p>
+      </article>
+
+      <article class="panel spread">
+        <p class="spread-eyebrow">Process notes</p>
+        <h2>How it was built</h2>
+        <ul id="process-list" class="content-list">
+          <li>Define the communication problem and audience.</li>
+          <li>Establish the visual system and tone.</li>
+          <li>Translate the system into layouts, prototypes, or spreads.</li>
+        </ul>
+      </article>
+
+      <article class="panel spread">
+        <p class="spread-eyebrow">Artifacts</p>
+        <h2>What to show next</h2>
+        <ul id="artifact-list" class="content-list">
+          <li>Hero spread or primary visual</li>
+          <li>System tags and tool row</li>
+          <li>Supporting screenshots or detail crops</li>
+        </ul>
+      </article>
+
+      <article class="panel spread spread-wide">
+        <p class="spread-eyebrow">Reflection</p>
+        <h2>Why this project belongs here</h2>
+        <p id="project-reflection">The strongest project pages should feel calm, editorial, and precise. They should turn the energy of the homepage into a readable case-study surface instead of trying to keep the orbit effect going forever.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="portfolio-data-config.js"></script>
+  <script src="view-project.js"></script>
+</body>
+</html>

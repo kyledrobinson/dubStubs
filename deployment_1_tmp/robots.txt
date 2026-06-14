@@ -1,0 +1,10 @@
+# DubStubs — robots.txt
+# Crawlers welcome on the whole site.
+
+User-agent: *
+Allow: /
+
+# Don't index user-uploaded background images
+Disallow: /img/uploads/
+
+Sitemap: https://dubstubs.com/sitemap.xml

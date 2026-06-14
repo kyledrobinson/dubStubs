@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kyle Robinson | Goal 1 Homepage Orbit Concept</title>
+  <script>
+    document.documentElement.classList.add("orbit-preload");
+    (function () {
+      try {
+        document.documentElement.dataset.displayMode = window.localStorage.getItem("portfolio-display-mode") || "orbit";
+      } catch (error) {
+        document.documentElement.dataset.displayMode = "orbit";
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="homepage-orbit-goal1.css">
+</head>
+<body class="goal-one-homepage">
+  <div id="bubbles" aria-hidden="true"></div>
+  <div class="scene-controls" aria-label="Homepage display controls">
+    <button class="layout-toggle" type="button" aria-pressed="false" aria-label="Switch to day timeline mode">Day Mode</button>
+    <button class="motion-toggle" type="button" aria-pressed="false" aria-label="Stop motion">Stop Motion</button>
+  </div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="wavyGradient1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#00ffe0" stop-opacity="0.72"></stop>
+        <stop offset="80%" stop-color="#008cff" stop-opacity="0.22"></stop>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
+      </linearGradient>
+      <linearGradient id="wavyGradient2" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"></stop>
+        <stop offset="60%" stop-color="#a5c7ff" stop-opacity="0.42"></stop>
+        <stop offset="100%" stop-color="#00c3ff" stop-opacity="0.14"></stop>
+      </linearGradient>
+      <linearGradient id="wavyGradient3" x1="1" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"></stop>
+        <stop offset="70%" stop-color="#77e3f0" stop-opacity="0.7"></stop>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
+      </linearGradient>
+      <linearGradient id="wavyGradient4" x1="1" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.04"></stop>
+        <stop offset="55%" stop-color="#7bffcb" stop-opacity="0.8"></stop>
+        <stop offset="100%" stop-color="#00ffe0" stop-opacity="0"></stop>
+      </linearGradient>
+      <symbol id="badge-app" viewBox="0 0 16 16">
+        <rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2.3" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M5 5.1h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="badge-print" viewBox="0 0 16 16">
+        <path d="M4.4 5.1V2.9h7.2v2.2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+        <rect x="3.1" y="6.1" width="9.8" height="4.4" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M4.7 10.5h6.6v2.6H4.7z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="badge-layout" viewBox="0 0 16 16">
+        <rect x="2.5" y="2.5" width="11" height="11" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M5.5 2.9v10.2M10.5 2.9v10.2M2.9 6h10.2" fill="none" stroke="currentColor" stroke-width="1.1"></path>
+      </symbol>
+      <symbol id="badge-vector" viewBox="0 0 16 16">
+        <circle cx="4.1" cy="11.7" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <circle cx="12" cy="4.1" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <circle cx="12.1" cy="11.8" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <path d="M5.3 10.8l5.5-5.7M5.6 11.3h4.9" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="badge-photo" viewBox="0 0 16 16">
+        <rect x="2.4" y="3.1" width="11.2" height="9.8" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <circle cx="6" cy="6.5" r="1.2" fill="none" stroke="currentColor" stroke-width="1.1"></circle>
+        <path d="M4.4 11l2.5-2.6 1.7 1.7 1.4-1.4 1.6 2.3" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="badge-code" viewBox="0 0 16 16">
+        <path d="M6.1 4.3L2.9 8l3.2 3.7M9.9 4.3L13.1 8l-3.2 3.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="badge-motion" viewBox="0 0 16 16">
+        <path d="M2.5 9.6c1.2-2 2.3-3 3.5-3s2.1.9 3.2 2.1c1.1 1.2 1.9 1.8 3 1.8.6 0 1.2-.2 1.8-.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+        <path d="M2.5 6.6c1.2-2 2.3-3 3.5-3s2.1.9 3.2 2.1c1.1 1.2 1.9 1.8 3 1.8.6 0 1.2-.2 1.8-.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.72"></path>
+      </symbol>
+      <symbol id="badge-cube" viewBox="0 0 16 16">
+        <path d="M8 2.6l4.8 2.7v5.4L8 13.4l-4.8-2.7V5.3L8 2.6z" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"></path>
+        <path d="M8 2.8v10.3M3.4 5.5L8 8l4.6-2.5" fill="none" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main class="homepage-shell">
+    <section class="profile-panel" aria-label="Profile intro">
+      <p class="panel-kicker">Selected works and ongoing projects</p>
+      <h1>Hello, I'm Kyle</h1>
+      <p class="profile-copy">
+        Designer. Developer. Dreamer.
+      </p>
+      <div class="profile-notes" aria-label="Practice categories">
+        <button class="profile-tag" type="button" data-category="print-production" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-print"></use></svg><span>Print Production</span></button>
+        <button class="profile-tag" type="button" data-category="visual-design" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Visual Design</span></button>
+        <button class="profile-tag" type="button" data-category="information-design" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Information Design</span></button>
+        <button class="profile-tag" type="button" data-category="production-design" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Production Design</span></button>
+        <button class="profile-tag" type="button" data-category="photo-editing" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-photo"></use></svg><span>Photo Editing</span></button>
+        <button class="profile-tag" type="button" data-category="layout-systems" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Layout Systems</span></button>
+        <button class="profile-tag" type="button" data-category="front-end-development" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-code"></use></svg><span>Front-End Development</span></button>
+        <button class="profile-tag" type="button" data-category="motion-graphics" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-motion"></use></svg><span>Motion Graphics</span></button>
+        <button class="profile-tag" type="button" data-category="3d-exploration" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-cube"></use></svg><span>3D Exploration</span></button>
+        <button class="profile-tag" type="button" data-category="ai-workflows" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>AI Workflows</span></button>
+      </div>
+    </section>
+
+    <section class="card-grid" aria-label="Project cards">
+      <article class="project-card card-left-top" data-card-index="1" data-hue-base="188" data-hue-range="16" data-categories="print-production information-design layout-systems production-design">
+        <p class="card-label">Featured</p>
+        <h2>Unclaimed Remains Brochure</h2>
+        <div class="card-badges" aria-label="Tools and process">
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>Id</span></span>
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-print"></use></svg><span>Print</span></span>
+        </div>
+        <p class="card-copy">
+          An informational brochure concept that balances sensitivity, clarity, and public-facing guidance.
+        </p>
+        <a class="card-link" href="view-project.html?project=unclaimed-remains-brochure">View Project</a>
+      </article>
+
+      <article class="project-card card-right-top" data-card-index="2" data-hue-base="205" data-hue-range="18" data-categories="visual-design production-design print-production">
+        <p class="card-label">Identity</p>
+        <h2>Bloor Street Dart League</h2>
+        <div class="card-badges" aria-label="Tools and process">
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Identity</span></span>
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-print"></use></svg><span>Print</span></span>
+        </div>
+        <p class="card-copy">
+          A neighborhood sports identity direction with room for posters, league graphics, and event materials.
+        </p>
+        <a class="card-link" href="view-project.html?project=bloor-street-dart-league">View Project</a>
+      </article>
+
+      <article class="project-card card-left-middle" data-card-index="3" data-hue-base="222" data-hue-range="14" data-categories="photo-editing information-design visual-design">
+        <p class="card-label">Reach</p>
+        <h2>Google Reviews</h2>
+        <div class="card-badges" aria-label="Tools and process">
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-photo"></use></svg><span>Ps</span></span>
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Info</span></span>
+        </div>
+        <p class="card-copy">
+          A proof-of-impact story built around map visibility, image traction, and practical digital reach.
+        </p>
+        <a class="card-link" href="view-project.html?project=google-reviews">View Project</a>
+      </article>
+
+      <article class="project-card card-right-middle" data-card-index="4" data-hue-base="194" data-hue-range="20" data-categories="visual-design production-design">
+        <p class="card-label">Brand Mark</p>
+        <h2>Ziggy's Rotor Logo</h2>
+        <div class="card-badges" aria-label="Tools and process">
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Mark</span></span>
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Vector</span></span>
+        </div>
+        <p class="card-copy">
+          A logo exploration shaped around mechanical energy, local character, and bold edge-lit contrast.
+        </p>
+        <a class="card-link" href="view-project.html?project=ziggys-rotor-logo">View Project</a>
+      </article>
+
+      <article class="project-card card-left-bottom" data-card-index="5" data-hue-base="236" data-hue-range="18" data-categories="front-end-development motion-graphics ai-workflows">
+        <p class="card-label">Process</p>
+        <h2>Motion Studies</h2>
+        <div class="card-badges" aria-label="Tools and process">
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-code"></use></svg><span>Code</span></span>
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-motion"></use></svg><span>Motion</span></span>
+        </div>
+        <p class="card-copy">
+          CSS-led interaction tests focused on atmosphere, responsiveness, and visual restraint.
+        </p>
+        <a class="card-link" href="view-project.html?project=motion-studies">View Project</a>
+      </article>
+
+      <article class="project-card card-right-bottom" data-card-index="6" data-hue-base="176" data-hue-range="15" data-categories="3d-exploration ai-workflows front-end-development">
+        <p class="card-label">Lab</p>
+        <h2>Material Experiments</h2>
+        <div class="card-badges" aria-label="Tools and process">
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-cube"></use></svg><span>3D</span></span>
+          <span class="card-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-code"></use></svg><span>Script</span></span>
+        </div>
+        <p class="card-copy">
+          A space for texture, lighting, and 3D-inspired interface fragments that inform future portfolio directions.
+        </p>
+        <a class="card-link" href="view-project.html?project=material-experiments">View Project</a>
+      </article>
+    </section>
+  </main>
+
+  <script src="portfolio-data-config.js"></script>
+  <script src="portfolio-sheet-loader.js"></script>
+  <script src="homepage-orbit-goal1.js"></script>
+</body>
+</html>

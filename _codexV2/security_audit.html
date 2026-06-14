@@ -1,0 +1,111 @@
+<!-- _codexV1/security_audit.html -->
+<!-- Human-readable security audit report for the DubStubs duplicated demo app. -->
+<!-- This file mirrors SECURITY_AUDIT_SCOPE.md for browser review; it is not loaded by the app. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DubStubs Security Audit</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; line-height: 1.5; color: #111827; background: #f8fafc; }
+    main { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    h1, h2, h3 { line-height: 1.15; }
+    h1 { margin: 0 0 8px; font-size: 34px; }
+    h2 { margin-top: 34px; padding-top: 18px; border-top: 1px solid #dbe3ef; font-size: 22px; }
+    h3 { margin-top: 24px; font-size: 17px; }
+    p, li { max-width: 860px; }
+    code { background: #e5e7eb; padding: 2px 5px; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 24px; background: white; }
+    th, td { border: 1px solid #dbe3ef; padding: 9px 10px; text-align: left; vertical-align: top; font-size: 14px; }
+    th { background: #eef2f7; }
+    .meta { color: #475569; margin-bottom: 22px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .high { background: #fee2e2; color: #991b1b; }
+    .medium { background: #fef3c7; color: #92400e; }
+    .low { background: #dcfce7; color: #166534; }
+    .done { background: #dbeafe; color: #1d4ed8; }
+    .panel { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 16px; }
+    pre { background: #111827; color: #f9fafb; padding: 14px; border-radius: 8px; overflow: auto; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>DubStubs Security Audit</h1>
+  <p class="meta">Audit date: 2026-05-14. Branch: <code>security/dubstubs-audit</code>. Target: <code>_codexV1</code>.</p>
+
+  <section class="panel">
+    <h2>A. Executive Summary</h2>
+    <p>The duplicated app is a static ticket designer with one PHP Replicate proxy. No database, payment flow, admin area, or server-side upload storage was found. The serious launch risk is the cost-bearing AI generation route.</p>
+    <table>
+      <thead><tr><th>Severity</th><th>Top risk</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge high">High</span></td><td>Public <code>POST /api/generate.php</code> needed abuse controls.</td><td>Basic rate limit added; auth optional</td></tr>
+        <tr><td><span class="badge high">High</span></td><td>Original token lookup allowed public-webroot env fallbacks.</td><td><span class="badge done">Fixed</span></td></tr>
+        <tr><td><span class="badge medium">Medium</span></td><td>Original API errors exposed deployment and provider details.</td><td><span class="badge done">Fixed</span></td></tr>
+        <tr><td><span class="badge medium">Medium</span></td><td>Browser uploads were unbounded.</td><td><span class="badge done">Fixed</span></td></tr>
+        <tr><td><span class="badge medium">Medium</span></td><td>Third-party export script was loaded from CDN.</td><td><span class="badge done">Self-hosted</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <h2>Architecture And Attack Surface</h2>
+  <p>DubStubs uses <code>index.html</code>, <code>styles.css</code>, browser <code>localStorage</code>, client-side file reads, client-side PNG export, and one PHP/cURL API route that calls Replicate.</p>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Method</th><th>Purpose</th><th>Security note</th></tr></thead>
+    <tbody>
+      <tr><td><code>/</code>, <code>/index.html</code></td><td>GET</td><td>Main app</td><td>Public static page.</td></tr>
+      <tr><td><code>/styles.css</code>, <code>/manifest.webmanifest</code>, <code>/robots.txt</code>, <code>/sitemap.xml</code></td><td>GET</td><td>Static metadata/assets</td><td>Public.</td></tr>
+      <tr><td><code>/favicon.svg</code>, <code>/og-image.svg</code>, <code>/img/*</code></td><td>GET</td><td>Images</td><td>Public curated assets only.</td></tr>
+      <tr><td><code>/api/generate.php</code></td><td>POST</td><td>AI background generation</td><td>Public cost-bearing route; basic per-IP file rate limit added.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Generation Tracking</h2>
+  <p>The PHP route now writes safe JSONL events to <code>/home/YOUR_CPANEL_USER/private/dubstubs-logs/generate-events.jsonl</code>. It records request ID, IP hash, prompt length/hash, Replicate HTTP status/id, generated image host, content type, and byte size. It does not log raw prompts, API tokens, full provider responses, or image bytes.</p>
+
+  <h2>B. Findings Table</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Severity</th><th>File</th><th>Line/function</th><th>Issue</th><th>Recommended fix</th><th>Difficulty</th></tr></thead>
+    <tbody>
+      <tr><td>DUB-001</td><td><span class="badge high">High</span></td><td><code>api/generate.php</code></td><td>Route + cURL line 157</td><td>AI generation needed abuse controls.</td><td>Basic per-IP rate limit added. Add Turnstile or demo auth if private.</td><td>Partially done</td></tr>
+      <tr><td>DUB-002</td><td><span class="badge high">High</span></td><td><code>api/generate.php</code></td><td>Token lookup</td><td>Original public env fallback risk.</td><td>Use private env only.</td><td>Done</td></tr>
+      <tr><td>DUB-003</td><td><span class="badge medium">Medium</span></td><td><code>api/generate.php</code></td><td>Error handlers</td><td>Original public debug detail leakage.</td><td>Generic client errors, server-side logs.</td><td>Done</td></tr>
+      <tr><td>DUB-004</td><td><span class="badge medium">Medium</span></td><td><code>api/generate.php</code></td><td>Body parse lines 111-137</td><td>Original JSON/body handling was loose.</td><td>Require JSON and cap request bytes.</td><td>Done</td></tr>
+      <tr><td>DUB-005</td><td><span class="badge medium">Medium</span></td><td><code>index.html</code></td><td><code>fileToDataUrl()</code></td><td>Image uploads were unbounded.</td><td>Limited to PNG/JPG/WebP, 5 MB, and 4096 px per side.</td><td>Done</td></tr>
+      <tr><td>DUB-006</td><td><span class="badge medium">Medium</span></td><td><code>index.html</code></td><td><code>innerHTML</code> renderers</td><td>Dynamic HTML patterns can become XSS if import/share is added.</td><td>Use DOM creation and <code>textContent</code>; escape role fields.</td><td>Medium</td></tr>
+      <tr><td>DUB-007</td><td><span class="badge medium">Medium</span></td><td><code>index.html</code></td><td>Line 56</td><td>CDN script lacked local pinning.</td><td>Vendored <code>html2canvas</code> locally.</td><td>Done</td></tr>
+      <tr><td>DUB-008</td><td><span class="badge medium">Medium</span></td><td><code>api/generate.php</code></td><td>Image fetch around line 455</td><td>No host/content-length check on generated image fetch.</td><td>Added HTTPS host allowlist, redirect rejection, byte cap, and content-type validation.</td><td>Done</td></tr>
+      <tr><td>DUB-009</td><td><span class="badge low">Low</span></td><td><code>index.html</code></td><td>Line 1384</td><td>Download filename was not slugged.</td><td>Added safe filename helper.</td><td>Done</td></tr>
+      <tr><td>DUB-010</td><td><span class="badge low">Low</span></td><td><code>index.html</code></td><td>Lines 1273-1274</td><td>Saved design storage is unbounded.</td><td>Limit saved count/size and handle quota errors.</td><td>Low</td></tr>
+    </tbody>
+  </table>
+
+  <h2>C. Quick Wins</h2>
+  <ul>
+    <li>Confirm the private rate-limit and log directories are writable on cPanel.</li>
+    <li>Escape <code>f.role</code> and reduce <code>innerHTML</code> use.</li>
+    <li>Set Replicate spend alerts and monthly caps outside code.</li>
+  </ul>
+
+  <h2>D. Must-Fix Before Public Launch</h2>
+  <ul>
+    <li>Decide whether public generation also needs Basic Auth, Turnstile, or invite-code gating.</li>
+    <li>Confirm the cPanel private directory is outside <code>public_html</code> and writable by PHP.</li>
+    <li>Set Replicate spend alerts and review generation logs during beta.</li>
+  </ul>
+
+  <h2>E. Suggested Pull Requests</h2>
+  <ol>
+    <li><strong>Secrets and env cleanup:</strong> implemented in this branch.</li>
+    <li><strong>API hardening:</strong> basic rate limit, 429 shape, generated-image URL checks implemented.</li>
+    <li><strong>Input validation:</strong> upload limits and filename slugging implemented; numeric clamps still worth tightening later.</li>
+    <li><strong>Upload/generated file safety:</strong> keep browser-only storage or write outside webroot.</li>
+    <li><strong>Production headers and logging:</strong> confirm <code>.htaccess</code>, add CSP after inline JS is moved, add HSTS after HTTPS verification.</li>
+  </ol>
+
+  <h2>Patch Status</h2>
+  <p>Implemented files: <code>api/generate.php</code>, <code>index.html</code>, <code>vendor/html2canvas.min.js</code>, <code>.gitignore</code>, <code>.htaccess</code>, and the audit docs. No remote GitHub PR was opened from this local audit. PHP syntax validation was not run because PHP is not installed in this shell.</p>
+</main>
+</body>
+</html>

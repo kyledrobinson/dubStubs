@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OG Image → PNG</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0a0b0e; color: #fafafa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 18px; margin: 0 0 6px; }
+  p { color: #a1a1aa; font-size: 13px; margin: 0 0 18px; }
+  .preview { background: #14161b; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; }
+  .preview img, .preview svg { max-width: 100%; height: auto; display: block; border-radius: 6px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+  .actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+  button { background: #f5d547; color: #000; border: none; border-radius: 8px; padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  button.secondary { background: rgba(255,255,255,0.05); color: #fafafa; border: 1px solid rgba(255,255,255,0.1); }
+  button:hover { filter: brightness(1.05); }
+  .status { font-size: 12px; color: #71717a; margin-top: 10px; min-height: 16px; }
+  iframe { width: 1200px; max-width: 100%; height: 630px; border: none; background: #0a0b0e; border-radius: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>OG Image → PNG converter</h1>
+  <p>Loads <code>og-image.svg</code> from the same folder, renders it, exports a 1200×630 PNG to your downloads.</p>
+
+  <div class="preview">
+    <object id="svgObj" type="image/svg+xml" data="og-image.svg" style="width:100%; max-width:1200px; aspect-ratio: 1200 / 630;"></object>
+    <div class="actions">
+      <button id="btnPng">Download as og-image.png (1200×630)</button>
+      <button id="btnPng2x" class="secondary">Download @2x (2400×1260)</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+</div>
+
+<script>
+async function svgToPng(scale = 1) {
+  const status = document.getElementById('status');
+  status.textContent = 'Loading SVG…';
+  const svg = await fetch('og-image.svg').then(r => r.text());
+  const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
+  await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const W = 1200 * scale, H = 630 * scale;
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, W, H);
+      canvas.toBlob(b => {
+        const a = document.createElement('a');
+        a.download = scale === 1 ? 'og-image.png' : `og-image@${scale}x.png`;
+        a.href = URL.createObjectURL(b);
+        a.click();
+        URL.revokeObjectURL(url);
+        URL.revokeObjectURL(a.href);
+        status.textContent = `Saved ${a.download} (${W}×${H})`;
+        resolve();
+      }, 'image/png');
+    };
+    img.onerror = () => { status.textContent = 'SVG load failed.'; reject(); };
+    img.src = url;
+  });
+}
+document.getElementById('btnPng').addEventListener('click', () => svgToPng(1));
+document.getElementById('btnPng2x').addEventListener('click', () => svgToPng(2));
+</script>
+</body>
+</html>

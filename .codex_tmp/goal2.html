@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="day">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kyle Robinson | Goal 2 Portfolio</title>
+  <script>
+    (function () {
+      try {
+        document.documentElement.dataset.mode = window.localStorage.getItem("goal2-display-mode") || "day";
+      } catch (error) {
+        document.documentElement.dataset.mode = "day";
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7fbff;
+      --bg-soft: #e8f4ff;
+      --panel: rgba(255, 255, 255, 0.72);
+      --panel-strong: rgba(255, 255, 255, 0.94);
+      --glass: rgba(255, 255, 255, 0.58);
+      --glass-strong: rgba(255, 255, 255, 0.82);
+      --line: rgba(37, 104, 176, 0.18);
+      --line-bright: rgba(22, 132, 222, 0.42);
+      --text: #102235;
+      --muted: #51677f;
+      --blue: #1677cf;
+      --cyan: #1aa5ef;
+      --green: #1bbf9a;
+      --violet: #5f6fe8;
+      --yellow: #b97706;
+      --shadow: 0 26px 70px rgba(37, 89, 143, 0.16);
+      --control-bg: rgba(255, 255, 255, 0.72);
+      --control-soft: rgba(255, 255, 255, 0.58);
+      --ink-on-accent: #062033;
+      --radius-xl: 32px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --serif: "Baskerville Old Face", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    }
+
+    :root[data-mode="night"] {
+      color-scheme: dark;
+      --bg: #0d1118;
+      --bg-soft: #101827;
+      --panel: rgba(8, 18, 29, 0.84);
+      --panel-strong: rgba(10, 28, 42, 0.94);
+      --glass: rgba(255, 255, 255, 0.055);
+      --glass-strong: rgba(255, 255, 255, 0.095);
+      --line: rgba(145, 232, 255, 0.18);
+      --line-bright: rgba(145, 239, 255, 0.38);
+      --text: rgba(245, 249, 255, 0.95);
+      --muted: rgba(216, 228, 240, 0.78);
+      --blue: #7ab6ff;
+      --cyan: #8defff;
+      --green: #a4ffd7;
+      --violet: #b3a6ff;
+      --yellow: #ffe19b;
+      --shadow: 0 26px 72px rgba(2, 9, 19, 0.48);
+      --control-bg: rgba(0, 0, 0, 0.22);
+      --control-soft: rgba(255, 255, 255, 0.07);
+      --ink-on-accent: #06131c;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(80, 170, 255, 0.24), transparent 34%),
+        radial-gradient(circle at 86% 4%, rgba(23, 119, 207, 0.16), transparent 30%),
+        linear-gradient(135deg, #ffffff 0%, #f8fcff 38%, #e3f2ff 72%, #cfe7ff 100%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(232, 244, 255, 0.74)),
+        var(--bg);
+    }
+
+    :root[data-mode="night"] body {
+      background:
+        linear-gradient(180deg, rgba(5, 9, 20, 0.15), rgba(5, 9, 20, 0.72)),
+        var(--bg);
+    }
+
+    #bubbles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.66;
+      mix-blend-mode: multiply;
+    }
+
+    .circle-bubble {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+
+    .circle-bubble svg {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      overflow: visible;
+      transform: scale(1.24);
+      transform-origin: center;
+    }
+
+    .bubble-path {
+      fill: none;
+      stroke-width: 1.45;
+      stroke-linecap: round;
+      opacity: 0.78;
+      filter:
+        drop-shadow(0 10px 24px rgba(22, 132, 222, 0.16))
+        drop-shadow(0 0 10px rgba(26, 165, 239, 0.16));
+      transition: filter 180ms ease, stroke-width 180ms ease;
+    }
+
+    .active .bubble-path {
+      stroke-width: 1.9;
+      filter:
+        drop-shadow(0 12px 30px rgba(22, 132, 222, 0.2))
+        drop-shadow(0 0 18px rgba(27, 191, 154, 0.2));
+    }
+
+    :root[data-mode="night"] #bubbles {
+      opacity: 0.52;
+      mix-blend-mode: screen;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    .page-shell {
+      position: relative;
+      z-index: 1;
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 42px;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .brand-orb {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(145deg, rgba(66, 244, 255, 0.9), rgba(26, 165, 239, 0.55)),
+        rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 38px rgba(66, 244, 255, 0.33), inset 0 -8px 16px rgba(0, 0, 0, 0.18);
+      color: var(--ink-on-accent);
+    }
+
+    .nav-actions,
+    .utility-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-actions {
+      justify-content: flex-end;
+    }
+
+    .pill-link,
+    .button-link,
+    .mode-toggle,
+    .help-toggle,
+    .sort-select {
+      min-height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      color: var(--text);
+      backdrop-filter: blur(18px);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .pill-link,
+    .button-link,
+    .mode-toggle,
+    .help-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+    }
+
+    .button-link,
+    .mode-toggle.is-night {
+      background: linear-gradient(135deg, rgba(66, 244, 255, 0.22), rgba(26, 165, 239, 0.14));
+      border-color: var(--line-bright);
+      box-shadow: 0 18px 46px rgba(26, 165, 239, 0.13);
+    }
+
+    .help-toggle {
+      width: 40px;
+      padding: 0;
+      font-size: 1rem;
+    }
+
+    .pill-link:hover,
+    .button-link:hover,
+    .mode-toggle:hover,
+    .help-toggle:hover,
+    .pill-link:focus-visible,
+    .button-link:focus-visible,
+    .mode-toggle:focus-visible,
+    .help-toggle:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(123, 255, 203, 0.66);
+      background: rgba(255, 255, 255, 0.105);
+      outline: none;
+    }
+
+    .pill-link:focus-visible,
+    .button-link:focus-visible,
+    .mode-toggle:focus-visible,
+    .help-toggle:focus-visible,
+    .sort-select:focus-visible,
+    .help-select:focus-visible {
+      outline: 2px solid rgba(124, 231, 255, 0.74);
+      outline-offset: 4px;
+    }
+
+    .help-wrap {
+      position: relative;
+    }
+
+    .help-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: min(360px, calc(100vw - 32px));
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)),
+        var(--panel-strong);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+    }
+
+    .help-panel[hidden] {
+      display: none;
+    }
+
+    .help-panel h2 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .help-select {
+      width: 100%;
+      min-height: 38px;
+      margin-bottom: 14px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--control-bg);
+      color: var(--text);
+    }
+
+    .help-section[hidden] {
+      display: none;
+    }
+
+    .help-section p,
+    .help-section li {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .help-section ol,
+    .help-section ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(340px, 1.05fr);
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 28px;
+    }
+
+    .hero-copy,
+    .demo-window,
+    .content-card,
+    .stat-card,
+    .timeline-card,
+    .footer-panel {
+      position: relative;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)),
+        var(--panel);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+      overflow: hidden;
+    }
+
+    .hero-copy::before,
+    .demo-window::before,
+    .content-card::before,
+    .timeline-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 24%, transparent 72%, rgba(66, 244, 255, 0.12));
+      opacity: 0.55;
+    }
+
+    .hero-copy {
+      min-height: 540px;
+      padding: clamp(26px, 4vw, 46px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .eyebrow {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--green);
+      border: 1px solid rgba(123, 255, 203, 0.36);
+      background: rgba(123, 255, 203, 0.08);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin: 0 0 20px;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(3rem, 7vw, 6.7rem);
+      line-height: 0.9;
+      letter-spacing: 0;
+    }
+
+    .hero-summary {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+      line-height: 1.65;
+      margin: 28px 0 0;
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .meta-chip {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(159, 213, 255, 0.16);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .meta-chip span,
+    .stat-card span,
+    .timeline-meta {
+      display: block;
+      color: var(--muted);
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 850;
+      margin-bottom: 8px;
+    }
+
+    .meta-chip strong {
+      font-size: 0.98rem;
+      line-height: 1.35;
+    }
+
+    .demo-window {
+      min-height: 540px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-radius: 22px;
+      border: 1px solid rgba(159, 213, 255, 0.16);
+      background: var(--control-bg);
+      padding: 12px 14px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dots i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: block;
+      background: var(--cyan);
+      box-shadow: 0 0 18px rgba(66, 244, 255, 0.5);
+    }
+
+    .dots i:nth-child(2) {
+      background: var(--green);
+    }
+
+    .dots i:nth-child(3) {
+      background: var(--violet);
+    }
+
+    .window-title {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .preview-board {
+      position: relative;
+      flex: 1;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid rgba(159, 213, 255, 0.16);
+      background:
+        radial-gradient(circle at 74% 18%, rgba(66, 244, 255, 0.13), transparent 32%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+      padding: 18px;
+    }
+
+    .preview-toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .fake-input,
+    .fake-button,
+    .fake-chip {
+      min-height: 34px;
+      border-radius: 11px;
+      border: 1px solid rgba(159, 213, 255, 0.17);
+      background: var(--control-soft);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .fake-button {
+      color: var(--cyan);
+      background: rgba(26, 165, 239, 0.12);
+    }
+
+    .fake-chip {
+      width: fit-content;
+      color: var(--ink-on-accent);
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      border: 0;
+      box-shadow: 0 12px 32px rgba(26, 165, 239, 0.18);
+      margin-bottom: 16px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.42);
+      border: 1px solid rgba(159, 213, 255, 0.13);
+    }
+
+    :root[data-mode="night"] .mini-grid {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .mini-card {
+      min-height: 82px;
+      padding: 12px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: rgba(237, 248, 255, 0.9);
+      background: var(--control-soft);
+      border: 1px solid rgba(159, 213, 255, 0.09);
+    }
+
+    .mini-card strong {
+      font-size: 0.92rem;
+      line-height: 1.05;
+    }
+
+    .mini-card span {
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .mini-card.is-active {
+      color: var(--ink-on-accent);
+      background: linear-gradient(135deg, var(--cyan), var(--green));
+      box-shadow: 0 0 24px rgba(66, 244, 255, 0.28);
+    }
+
+    .preview-caption {
+      margin: 16px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+
+    .tag-filter-section {
+      position: relative;
+      z-index: 2;
+      margin-top: 22px;
+      padding: 12px 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06)),
+        var(--panel);
+      box-shadow: 0 18px 48px rgba(37, 89, 143, 0.12);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+
+    .tag-rail {
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+
+    .tag-track {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 10px;
+      min-width: max-content;
+      padding: 0 5px;
+      animation: tagDrift 58s linear infinite;
+    }
+
+    .tag-track[aria-hidden="true"] {
+      pointer-events: none;
+    }
+
+    .tag-filter-section:hover .tag-track,
+    .tag-filter-section:focus-within .tag-track {
+      animation-play-state: paused;
+    }
+
+    .tag-filter-button,
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(37, 104, 176, 0.18);
+      background: rgba(255, 255, 255, 0.54);
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .tag-filter-button {
+      min-height: 36px;
+      padding: 0 12px;
+      cursor: pointer;
+      transition:
+        background 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+    }
+
+    .tag-filter-button svg,
+    .tag-pill svg {
+      width: 13px;
+      height: 13px;
+      color: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .tag-filter-button:hover,
+    .tag-filter-button:focus-visible,
+    .tag-filter-button.is-active {
+      color: var(--text);
+      border-color: var(--line-bright);
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 14px 28px rgba(22, 132, 222, 0.14);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .tag-filter-button.is-active svg {
+      color: var(--green);
+    }
+
+    :root[data-mode="night"] .tag-filter-button,
+    :root[data-mode="night"] .tag-pill {
+      border-color: rgba(145, 232, 255, 0.18);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    :root[data-mode="night"] .tag-filter-button:hover,
+    :root[data-mode="night"] .tag-filter-button:focus-visible,
+    :root[data-mode="night"] .tag-filter-button.is-active {
+      background: rgba(255, 255, 255, 0.105);
+    }
+
+    @keyframes tagDrift {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(300px, 0.55fr);
+      gap: 22px;
+      margin-top: 22px;
+      align-items: start;
+    }
+
+    .content-card {
+      padding: clamp(24px, 4vw, 40px);
+    }
+
+    .content-card h2,
+    .timeline-section h2 {
+      margin: 0 0 18px;
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .content-card p {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .content-card p + p {
+      margin-top: 18px;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      border-radius: var(--radius-lg);
+    }
+
+    .stat-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 1.15rem;
+      line-height: 1.38;
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tag-cloud span {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(159, 213, 255, 0.17);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .timeline-section {
+      margin-top: 22px;
+      border-radius: var(--radius-xl);
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.035);
+      backdrop-filter: blur(18px);
+    }
+
+    .timeline-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .sort-select {
+      min-width: 210px;
+      padding: 0 14px;
+      color: var(--text);
+    }
+
+    .timeline-list {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 22px;
+    }
+
+    .timeline-list::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(124, 231, 255, 0.36), rgba(123, 255, 203, 0.28), transparent);
+      pointer-events: none;
+    }
+
+    .timeline-card {
+      min-height: 210px;
+      padding: 22px;
+    }
+
+    .timeline-card:nth-child(even) {
+      margin-top: 46px;
+    }
+
+    .timeline-card[hidden] {
+      display: none;
+    }
+
+    .timeline-card h3 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(1.45rem, 2vw, 2rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .timeline-card p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
+    .timeline-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag-pill {
+      min-height: 28px;
+      padding: 0 9px;
+      font-size: 0.58rem;
+    }
+
+    .timeline-link {
+      display: inline-flex;
+      margin-top: 16px;
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .timeline-link:hover,
+    .timeline-link:focus-visible {
+      color: var(--green);
+      outline: none;
+    }
+
+    .footer-panel {
+      margin-top: 22px;
+      padding: clamp(24px, 4vw, 38px);
+      border-color: rgba(123, 255, 203, 0.24);
+      background:
+        radial-gradient(circle at 18% 20%, rgba(123, 255, 203, 0.14), transparent 34%),
+        linear-gradient(135deg, rgba(26, 165, 239, 0.16), rgba(155, 140, 255, 0.08));
+    }
+
+    .footer-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
+    .footer-panel strong {
+      color: var(--text);
+    }
+
+    .license-line {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .license-line a {
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .license-line a:hover,
+    .license-line a:focus-visible {
+      color: var(--green);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .demo-window {
+        min-height: auto;
+      }
+
+      .timeline-list {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-list::before {
+        display: none;
+      }
+
+      .timeline-card:nth-child(even) {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell {
+        width: min(100% - 20px, var(--max));
+        padding-top: 16px;
+      }
+
+      .topbar,
+      .timeline-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-actions,
+      .utility-actions {
+        justify-content: flex-start;
+      }
+
+      .hero-meta,
+      .preview-toolbar,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .demo-window,
+      .content-card,
+      .timeline-section,
+      .footer-panel {
+        border-radius: 24px;
+      }
+
+      h1 {
+        font-size: clamp(3rem, 17vw, 5rem);
+      }
+
+      .sort-select {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+
+      #bubbles {
+        display: none;
+      }
+
+      .tag-track {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="bubbles" aria-hidden="true"></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="wavyGradient1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"></stop>
+        <stop offset="55%" stop-color="#4aaeff" stop-opacity="0.54"></stop>
+        <stop offset="100%" stop-color="#1677cf" stop-opacity="0.1"></stop>
+      </linearGradient>
+      <linearGradient id="wavyGradient2" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.48"></stop>
+        <stop offset="60%" stop-color="#84c7ff" stop-opacity="0.44"></stop>
+        <stop offset="100%" stop-color="#1aa5ef" stop-opacity="0.16"></stop>
+      </linearGradient>
+      <linearGradient id="wavyGradient3" x1="1" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5f6fe8" stop-opacity="0.1"></stop>
+        <stop offset="62%" stop-color="#42c7ff" stop-opacity="0.44"></stop>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0.22"></stop>
+      </linearGradient>
+      <linearGradient id="wavyGradient4" x1="1" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"></stop>
+        <stop offset="55%" stop-color="#1bbf9a" stop-opacity="0.32"></stop>
+        <stop offset="100%" stop-color="#1aa5ef" stop-opacity="0.08"></stop>
+      </linearGradient>
+      <symbol id="badge-app" viewBox="0 0 16 16">
+        <rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2.3" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M5 5.1h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="badge-print" viewBox="0 0 16 16">
+        <path d="M4.4 5.1V2.9h7.2v2.2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+        <rect x="3.1" y="6.1" width="9.8" height="4.4" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M4.7 10.5h6.6v2.6H4.7z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="badge-layout" viewBox="0 0 16 16">
+        <rect x="2.5" y="2.5" width="11" height="11" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <path d="M5.5 2.9v10.2M10.5 2.9v10.2M2.9 6h10.2" fill="none" stroke="currentColor" stroke-width="1.1"></path>
+      </symbol>
+      <symbol id="badge-vector" viewBox="0 0 16 16">
+        <circle cx="4.1" cy="11.7" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <circle cx="12" cy="4.1" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <circle cx="12.1" cy="11.8" r="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+        <path d="M5.3 10.8l5.5-5.7M5.6 11.3h4.9" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></path>
+      </symbol>
+      <symbol id="badge-photo" viewBox="0 0 16 16">
+        <rect x="2.4" y="3.1" width="11.2" height="9.8" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        <circle cx="6" cy="6.5" r="1.2" fill="none" stroke="currentColor" stroke-width="1.1"></circle>
+        <path d="M4.4 11l2.5-2.6 1.7 1.7 1.4-1.4 1.6 2.3" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="badge-code" viewBox="0 0 16 16">
+        <path d="M6.1 4.3L2.9 8l3.2 3.7M9.9 4.3L13.1 8l-3.2 3.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="badge-motion" viewBox="0 0 16 16">
+        <path d="M2.5 9.6c1.2-2 2.3-3 3.5-3s2.1.9 3.2 2.1c1.1 1.2 1.9 1.8 3 1.8.6 0 1.2-.2 1.8-.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+        <path d="M2.5 6.6c1.2-2 2.3-3 3.5-3s2.1.9 3.2 2.1c1.1 1.2 1.9 1.8 3 1.8.6 0 1.2-.2 1.8-.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.72"></path>
+      </symbol>
+      <symbol id="badge-cube" viewBox="0 0 16 16">
+        <path d="M8 2.6l4.8 2.7v5.4L8 13.4l-4.8-2.7V5.3L8 2.6z" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"></path>
+        <path d="M8 2.8v10.3M3.4 5.5L8 8l4.6-2.5" fill="none" stroke="currentColor" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+    </defs>
+  </svg>
+  <main class="page-shell">
+    <header class="topbar" aria-label="Goal 2 navigation">
+      <a class="brand-mark" href="homepage-orbit-goal1.html" aria-label="Back to Goal 1 homepage">
+        <span class="brand-orb" aria-hidden="true">K</span>
+        <span>Kyle Robinson</span>
+      </a>
+      <nav class="nav-actions" aria-label="Page actions">
+        <a class="pill-link" href="homepage-orbit-goal1.html">Goal 1</a>
+        <a class="button-link" href="#work-timeline">Timeline</a>
+        <div class="utility-actions">
+          <button class="mode-toggle" type="button" aria-pressed="false">Night Mode</button>
+          <div class="help-wrap">
+            <button class="help-toggle" type="button" aria-expanded="false" aria-controls="help-panel" aria-label="Open FAQ and instructions">?</button>
+            <aside class="help-panel" id="help-panel" hidden>
+              <h2>Help</h2>
+              <label class="visually-hidden" for="help-select">Help topic</label>
+              <select class="help-select" id="help-select">
+                <option value="instructions">Instructions</option>
+                <option value="faq">FAQ</option>
+              </select>
+              <section class="help-section" data-help-section="instructions">
+                <ol>
+                  <li>Use the mode button to switch between the Goal 2 day view and a darker night view.</li>
+                  <li>Use the timeline filter to sort the work into all, design, code, workflow, or lab categories.</li>
+                  <li>Select a project title or View Project link to open the longer project page.</li>
+                </ol>
+              </section>
+              <section class="help-section" data-help-section="faq" hidden>
+                <ul>
+                  <li><strong>Can this be reused?</strong> Yes, with attribution for noncommercial use.</li>
+                  <li><strong>Is there motion?</strong> Only small interface transitions. Reduced-motion preferences are respected.</li>
+                  <li><strong>Why Goal 2?</strong> This page tests a calmer portfolio layout before replacing the orbit concept.</li>
+                </ul>
+              </section>
+            </aside>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <article class="hero-copy">
+        <div>
+          <p class="eyebrow">Goal 2 / Static Timeline System</p>
+          <h1 id="page-title">Portfolio Work, Sorted for Reading</h1>
+          <p class="hero-summary">
+            A calmer portfolio direction that keeps the glass calendar energy from the sample layout,
+            but turns the moving orbit into a readable scroll-first timeline.
+          </p>
+        </div>
+
+        <div class="hero-meta" aria-label="Goal 2 summary">
+          <div class="meta-chip">
+            <span>Mode</span>
+            <strong>Day/night styling with no motion-heavy dependency</strong>
+          </div>
+          <div class="meta-chip">
+            <span>Intent</span>
+            <strong>Accessible browsing, project scanning, and portfolio polish</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="demo-window" aria-label="Timeline preview">
+        <div class="window-bar">
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="window-title">Goal 2 preview</span>
+        </div>
+
+        <div class="preview-board">
+          <div class="preview-toolbar" aria-hidden="true">
+            <div class="fake-input">Search selected work</div>
+            <div class="fake-button">Sort</div>
+            <div class="fake-button">Mode</div>
+          </div>
+          <div class="fake-chip">Selected work timeline</div>
+
+          <div class="mini-grid" aria-hidden="true">
+            <div class="mini-card is-active"><strong>Print</strong><span>Brochure</span></div>
+            <div class="mini-card"><strong>Brand</strong><span>Logo system</span></div>
+            <div class="mini-card"><strong>Reach</strong><span>Reviews</span></div>
+            <div class="mini-card"><strong>Motion</strong><span>CSS studies</span></div>
+            <div class="mini-card"><strong>Lab</strong><span>Materials</span></div>
+            <div class="mini-card"><strong>Code</strong><span>Interface</span></div>
+          </div>
+
+          <p class="preview-caption">
+            The page keeps the sample's dense product-window feel while making the portfolio easier
+            to scan, sort, and read without constant motion.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="tag-filter-section" aria-label="Filter work by tag">
+      <div class="tag-rail">
+        <div class="tag-track">
+          <button class="tag-filter-button is-active" type="button" data-filter="all" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>All Work</span></button>
+          <button class="tag-filter-button" type="button" data-filter="print-production" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-print"></use></svg><span>Print Production</span></button>
+          <button class="tag-filter-button" type="button" data-filter="visual-design" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Visual Design</span></button>
+          <button class="tag-filter-button" type="button" data-filter="information-design" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Information Design</span></button>
+          <button class="tag-filter-button" type="button" data-filter="production-design" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Production Design</span></button>
+          <button class="tag-filter-button" type="button" data-filter="photo-editing" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-photo"></use></svg><span>Photo Editing</span></button>
+          <button class="tag-filter-button" type="button" data-filter="layout-systems" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Layout Systems</span></button>
+          <button class="tag-filter-button" type="button" data-filter="front-end-development" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-code"></use></svg><span>Front-End Development</span></button>
+          <button class="tag-filter-button" type="button" data-filter="motion-graphics" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-motion"></use></svg><span>Motion Graphics</span></button>
+          <button class="tag-filter-button" type="button" data-filter="3d-exploration" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-cube"></use></svg><span>3D Exploration</span></button>
+          <button class="tag-filter-button" type="button" data-filter="ai-workflows" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>AI Workflows</span></button>
+        </div>
+        <div class="tag-track" aria-hidden="true">
+          <button class="tag-filter-button is-active" type="button" data-filter="all" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>All Work</span></button>
+          <button class="tag-filter-button" type="button" data-filter="print-production" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-print"></use></svg><span>Print Production</span></button>
+          <button class="tag-filter-button" type="button" data-filter="visual-design" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Visual Design</span></button>
+          <button class="tag-filter-button" type="button" data-filter="information-design" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Information Design</span></button>
+          <button class="tag-filter-button" type="button" data-filter="production-design" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Production Design</span></button>
+          <button class="tag-filter-button" type="button" data-filter="photo-editing" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-photo"></use></svg><span>Photo Editing</span></button>
+          <button class="tag-filter-button" type="button" data-filter="layout-systems" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Layout Systems</span></button>
+          <button class="tag-filter-button" type="button" data-filter="front-end-development" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-code"></use></svg><span>Front-End Development</span></button>
+          <button class="tag-filter-button" type="button" data-filter="motion-graphics" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-motion"></use></svg><span>Motion Graphics</span></button>
+          <button class="tag-filter-button" type="button" data-filter="3d-exploration" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-cube"></use></svg><span>3D Exploration</span></button>
+          <button class="tag-filter-button" type="button" data-filter="ai-workflows" tabindex="-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>AI Workflows</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-grid" aria-label="Goal 2 framing">
+      <article class="content-card">
+        <h2>Why This Exists</h2>
+        <p>
+          The orbit homepage is expressive, but a calmer alternative helps people who prefer clear reading,
+          keyboard-friendly browsing, or reduced motion.
+        </p>
+        <p>
+          Goal 2 keeps the same personality: polished glass surfaces, sharp color, compact project evidence,
+          and a little entertainment in the layout without making the interaction fight the content.
+        </p>
+      </article>
+
+      <aside class="side-stack" aria-label="Goal 2 details">
+        <div class="stat-card">
+          <span>Layout</span>
+          <strong>Scroll-first project timeline with lightweight sorting</strong>
+        </div>
+        <div class="stat-card">
+          <span>Accessibility</span>
+          <strong>Static reading path, visible controls, reduced-motion support</strong>
+        </div>
+        <div class="stat-card">
+          <span>Tags</span>
+          <div class="tag-cloud">
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JavaScript</span>
+            <span>Portfolio</span>
+            <span>UX</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="timeline-section" id="work-timeline" aria-labelledby="timeline-title">
+      <div class="timeline-head">
+        <div>
+          <p class="eyebrow">Selected Work</p>
+          <h2 id="timeline-title">Timeline Sort</h2>
+        </div>
+        <label>
+          <span class="visually-hidden">Sort timeline</span>
+          <select class="sort-select" id="timeline-sort">
+            <option value="all">All work</option>
+            <option value="print-production">Print Production</option>
+            <option value="visual-design">Visual Design</option>
+            <option value="information-design">Information Design</option>
+            <option value="production-design">Production Design</option>
+            <option value="photo-editing">Photo Editing</option>
+            <option value="layout-systems">Layout Systems</option>
+            <option value="front-end-development">Front-End Development</option>
+            <option value="motion-graphics">Motion Graphics</option>
+            <option value="3d-exploration">3D Exploration</option>
+            <option value="ai-workflows">AI Workflows</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="timeline-list" aria-live="polite">
+        <article class="timeline-card" data-category="design workflow print-production information-design layout-systems production-design">
+          <span class="timeline-meta">Print Production / Information Design</span>
+          <h3>Unclaimed Remains Brochure</h3>
+          <p>A sensitive public-facing brochure direction built around sequence, restraint, and clarity.</p>
+          <div class="timeline-tags" aria-label="Project tags">
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-print"></use></svg><span>Print</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Info</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Layout</span></span>
+          </div>
+          <a class="timeline-link" href="view-project.html?project=unclaimed-remains-brochure">View Project</a>
+        </article>
+
+        <article class="timeline-card" data-category="design visual-design production-design print-production">
+          <span class="timeline-meta">Identity / Local Sports</span>
+          <h3>Bloor Street Dart League</h3>
+          <p>A neighborhood sports identity with poster energy, practical event use, and bold mark work.</p>
+          <div class="timeline-tags" aria-label="Project tags">
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Identity</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Design</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-print"></use></svg><span>Print</span></span>
+          </div>
+          <a class="timeline-link" href="view-project.html?project=bloor-street-dart-league">View Project</a>
+        </article>
+
+        <article class="timeline-card" data-category="workflow design photo-editing information-design visual-design">
+          <span class="timeline-meta">Reach / Proof of Impact</span>
+          <h3>Google Reviews</h3>
+          <p>A project story built around discoverability, image upkeep, and local search confidence.</p>
+          <div class="timeline-tags" aria-label="Project tags">
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-photo"></use></svg><span>Photo</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-layout"></use></svg><span>Info</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Design</span></span>
+          </div>
+          <a class="timeline-link" href="view-project.html?project=google-reviews">View Project</a>
+        </article>
+
+        <article class="timeline-card" data-category="design visual-design production-design">
+          <span class="timeline-meta">Brand Mark / Vector System</span>
+          <h3>Ziggy's Rotor Logo</h3>
+          <p>A mechanical logo exploration shaped for signage, social crops, and branded applications.</p>
+          <div class="timeline-tags" aria-label="Project tags">
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Mark</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-vector"></use></svg><span>Vector</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>System</span></span>
+          </div>
+          <a class="timeline-link" href="view-project.html?project=ziggys-rotor-logo">View Project</a>
+        </article>
+
+        <article class="timeline-card" data-category="code lab front-end-development motion-graphics ai-workflows">
+          <span class="timeline-meta">Front-End / Motion Studies</span>
+          <h3>Motion Studies</h3>
+          <p>Interaction experiments focused on atmosphere, pacing, hover states, and visual restraint.</p>
+          <div class="timeline-tags" aria-label="Project tags">
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-code"></use></svg><span>Code</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-motion"></use></svg><span>Motion</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>AI</span></span>
+          </div>
+          <a class="timeline-link" href="view-project.html?project=motion-studies">View Project</a>
+        </article>
+
+        <article class="timeline-card" data-category="lab code 3d-exploration ai-workflows front-end-development">
+          <span class="timeline-meta">3D / Interface Lab</span>
+          <h3>Material Experiments</h3>
+          <p>Texture, lighting, and 3D-inspired interface fragments that inform future web directions.</p>
+          <div class="timeline-tags" aria-label="Project tags">
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-cube"></use></svg><span>3D</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-code"></use></svg><span>Code</span></span>
+            <span class="tag-pill"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#badge-app"></use></svg><span>AI</span></span>
+          </div>
+          <a class="timeline-link" href="view-project.html?project=material-experiments">View Project</a>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer-panel" aria-label="Copyright and license">
+      <p><strong>&copy; 2026 Kyle Robinson.</strong> Portfolio layout, writing, and visual direction are shared for open noncommercial use with attribution.</p>
+      <p class="license-line">
+        <span>Licensed under</span>
+        <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license noopener" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International</a>
+      </p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const modeKey = "goal2-display-mode";
+      const modeToggle = document.querySelector(".mode-toggle");
+      const helpToggle = document.querySelector(".help-toggle");
+      const helpPanel = document.getElementById("help-panel");
+      const helpSelect = document.getElementById("help-select");
+      const helpSections = Array.from(document.querySelectorAll("[data-help-section]"));
+      const sortSelect = document.getElementById("timeline-sort");
+      const timelineCards = Array.from(document.querySelectorAll(".timeline-card"));
+      const filterButtons = Array.from(document.querySelectorAll(".tag-filter-button"));
+
+      function setMode(mode) {
+        const nextMode = mode === "night" ? "night" : "day";
+        document.documentElement.dataset.mode = nextMode;
+        if (modeToggle) {
+          modeToggle.textContent = nextMode === "night" ? "Day Mode" : "Night Mode";
+          modeToggle.setAttribute("aria-pressed", nextMode === "night" ? "true" : "false");
+          modeToggle.classList.toggle("is-night", nextMode === "night");
+        }
+
+        try {
+          window.localStorage.setItem(modeKey, nextMode);
+        } catch (error) {
+          // Storage is optional. The page still switches modes in the current session.
+        }
+      }
+
+      function setHelpTopic(topic) {
+        helpSections.forEach((section) => {
+          section.hidden = section.dataset.helpSection !== topic;
+        });
+      }
+
+      function setHelpOpen(open) {
+        if (!helpToggle || !helpPanel) {
+          return;
+        }
+
+        helpPanel.hidden = !open;
+        helpToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+
+      function sortTimeline(value) {
+        const activeValue = value || "all";
+        timelineCards.forEach((card) => {
+          const categories = String(card.dataset.category || "").split(/\s+/);
+          card.hidden = activeValue !== "all" && !categories.includes(activeValue);
+        });
+
+        filterButtons.forEach((button) => {
+          const active = button.dataset.filter === activeValue;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        if (sortSelect && sortSelect.value !== activeValue) {
+          sortSelect.value = activeValue;
+        }
+      }
+
+      if (modeToggle) {
+        modeToggle.addEventListener("click", () => {
+          setMode(document.documentElement.dataset.mode === "night" ? "day" : "night");
+        });
+      }
+
+      if (helpToggle && helpPanel) {
+        helpToggle.addEventListener("click", () => {
+          setHelpOpen(helpPanel.hidden);
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!event.target.closest(".help-wrap")) {
+            setHelpOpen(false);
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            setHelpOpen(false);
+          }
+        });
+      }
+
+      if (helpSelect) {
+        helpSelect.addEventListener("change", () => {
+          setHelpTopic(helpSelect.value);
+        });
+        setHelpTopic(helpSelect.value);
+      }
+
+      if (sortSelect) {
+        sortSelect.addEventListener("change", () => {
+          sortTimeline(sortSelect.value);
+        });
+      }
+
+      filterButtons
+        .filter((button) => button.getAttribute("tabindex") !== "-1")
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            sortTimeline(button.dataset.filter);
+          });
+        });
+
+      setMode(document.documentElement.dataset.mode);
+      sortTimeline(sortSelect ? sortSelect.value : "all");
+    })();
+  </script>
+  <script>
+    (function () {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "wavyLines.js";
+      script.defer = true;
+      document.body.appendChild(script);
+    })();
+  </script>
+</body>
+</html>

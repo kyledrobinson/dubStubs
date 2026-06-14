@@ -1,0 +1,16 @@
+{
+  "name": "DubStubs",
+  "short_name": "DubStubs",
+  "description": "Design custom keepsake tickets — turn real-world memories into beautifully designed ticket stubs.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0b0e",
+  "theme_color": "#0a0b0e",
+  "categories": ["design", "productivity", "lifestyle", "photo"],
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

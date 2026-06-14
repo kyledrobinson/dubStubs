@@ -1,0 +1,147 @@
+portfolio_css_codex_work/
+  .gitignore
+  agents.md
+  filetree.txt
+  goal2.html
+
+  homepage-orbit-goal1.html
+  homepage-orbit-goal1.css
+  homepage-orbit-goal1.js
+
+  homepage-reset-goal1.html
+  homepage-reset-goal1.css
+  homepage-reset-goal1.js
+
+  view-project.html
+  view-project.css
+  view-project.js
+
+  motivation-cards-lab.html
+  motivation-cards-lab.css
+  motivation-cards-lab.js
+
+  portfolio-data-config.js
+  portfolio-sheet-loader.js
+
+  styles.css
+  wavyLines.js
+
+  variant-program-notes.css
+  variant-program-notes.js
+  variant-transmission-deck.css
+  variant-transmission-deck.js
+  variant-work-showcase.css
+  variant-work-showcase.js
+
+  combined-bu.html
+  combined-bu5_081025.html
+  combined-bu5_081725.html
+  combined-bu5_081725-TenThirtyGreat.html
+  combined-bu5_081725-TenThirtyGreat-1.html
+  combined-bu5_081725-TenThirtyGreat-2.html
+  combined-bu5_081725-TenThirtyGreat-3.html
+  combined-032726-TenThirtyGreat-3-bu-editorial.html
+  combined-0362726.html
+  combined.html
+  project.html
+  project2.html
+  index-tracking-bu.html
+
+  google-sheets/
+    portfolio-data-endpoint.gs
+    README.md
+    sheet1-profile.csv
+    sheet2-projects.csv
+
+  ops/
+    decision-log.md
+    orbit-goal1-plan.md
+    project-brief.md
+    proposals.json
+    research-log.json
+    run-log.json
+
+  tracking/
+    index.html
+    issues.json
+    README.md
+    runs.json
+    select-research-target.ps1
+    snapshot-portfolio.ps1
+    start-auto-snapshot.cmd
+    start-auto-snapshot.ps1
+    take-snapshot.cmd
+    validate-tracker.ps1
+    artifacts/
+    screenshots/
+    snapshots/
+
+  slider/
+    cssControllableSliders.html
+    cssSliderOnly.css
+    cssSliderOnly.html
+    cssSliderOnly_old.html
+    sliderPROMPT.md
+    slidertest.html
+
+  homepage-orbit-test/
+    AGENTS.md
+    homepage-orbit-goal1.html
+    homepage-orbit-goal1.css
+    homepage-orbit-goal1.js
+    portfolio-data-config.js
+    portfolio-sheet-loader.js
+    view-project.html
+    eval/
+      prompts.md
+      review-rubric.md
+      test-checklist.md
+
+  homepage_orbit_ai/
+    AGENTS.md
+    homepage-orbit-goal1.html
+    homepage-orbit-goal1.css
+    homepage-orbit-goal1.js
+    portfolio-data-config.js
+    portfolio-sheet-loader.js
+    view-project.html
+    eval/
+      prompts.md
+      review-rubric.md
+      test-checklist.md
+
+  claude/
+  buttonmenutoggle
+  buttonmenutoggle.txt
+  menutoggle.css
+  menutogglecss.txt
+  menutoggle_bu.css
+
+  port_BackUPs/
+    April/
+    local-variant-assets-2026-03-27_21-47-32/
+    turning-point-2026-03-27_21-32-56/
+    combined-1-2bu.html
+    combined-1.html
+    combined-2-bu.html
+    combined-bu3.html
+    combined-bu4.html
+    rainbowborder8.html
+    scooptext.html
+    wavylines6.html
+
+Notes:
+  - This tree is intentionally trimmed to the current working structure.
+  - Deep backup/snapshot contents are not fully expanded here.
+  - Main live portfolio homepage:
+      homepage-orbit-goal1.html
+      homepage-orbit-goal1.css
+      homepage-orbit-goal1.js
+  - Main project-detail page:
+      view-project.html
+      view-project.css
+      view-project.js
+  - Sheet-driven data wiring:
+      portfolio-data-config.js
+      portfolio-sheet-loader.js
+      google-sheets/portfolio-data-endpoint.gs

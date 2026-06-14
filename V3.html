@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>DubStubs — Design custom keepsake tickets</title>
+<meta name="description" content="DubStubs turns your real-world memories — concerts, games, road trips — into beautifully designed custom ticket stubs. A love letter to the show stub.">
+<meta name="author" content="DubStubs">
+<meta name="keywords" content="ticket designer, custom tickets, keepsake tickets, ticket stub, concert ticket maker, memento, ticketmaster style stub, event ticket creator">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0b0e">
+<link rel="canonical" href="https://dubstubs.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DubStubs">
+<meta property="og:title" content="DubStubs — Design custom keepsake tickets">
+<meta property="og:description" content="Turn real-world memories into beautifully designed ticket stubs.">
+<meta property="og:url" content="https://dubstubs.com/">
+<meta property="og:image" content="https://dubstubs.com/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DubStubs — Design custom keepsake tickets">
+<meta name="twitter:description" content="Turn real-world memories into beautifully designed ticket stubs.">
+<meta name="twitter:image" content="https://dubstubs.com/og-image.svg">
+
+<!-- Icons & manifest -->
+<link rel="icon" href="/img/DubStubs_Logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/DubStubs_Logo.svg">
+<link rel="manifest" href="/manifest.webmanifest">
+
+<!-- JSON-LD structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DubStubs",
+  "url": "https://dubstubs.com/",
+  "description": "Design custom keepsake tickets — turn real-world memories into beautifully designed ticket stubs.",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Web",
+  "browserRequirements": "Requires JavaScript and a modern browser",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<!-- Fonts & libs -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<!-- Stylesheet -->
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <img class="logo" src="/img/DubStubs_Logo.svg" alt="DubStubs">
+    <span>DubStubs</span>
+    <span class="v-tag">v2</span>
+  </div>
+  <input type="text" class="design-name-input" id="designName" value="Untitled" spellcheck="false">
+  <div class="header-actions">
+    <button class="btn ghost" id="btnNew" title="New ticket">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 4v12M4 10h12"/></svg>
+      <span class="hide-sm">New</span>
+    </button>
+    <button class="btn" id="btnSave" title="Save design (⌘S)">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4h10l1 1v11l-2 1H5l-1-1V5z"/><path d="M7 4v4h6V4"/></svg>
+      <span>Save</span>
+    </button>
+    <button class="btn primary" id="btnExport" title="Export PNG">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3v10m0 0l-3-3m3 3l3-3M4 17h12"/></svg>
+      <span>Export</span>
+    </button>
+  </div>
+</header>
+
+<main class="app">
+  <nav class="rail">
+    <button class="rail-btn active" data-tab="design" data-tooltip="Design">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="6.5"/><path d="M3.5 10h13M10 3.5v13M5 5l10 10M15 5L5 15"/></svg>
+    </button>
+    <button class="rail-btn" data-tab="themes" data-tooltip="Themes">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="11" y="3" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg>
+    </button>
+    <button class="rail-btn" data-tab="background" data-tooltip="Background">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="14" height="14" rx="2"/><circle cx="7.5" cy="7.5" r="1.5"/><path d="M3 14l4-4 5 5 5-3"/></svg>
+    </button>
+    <button class="rail-btn" data-tab="photo" data-tooltip="Photo Layer">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="14" height="11" rx="1.5"/><circle cx="10" cy="10.5" r="3"/><circle cx="13.5" cy="7.5" r="0.6" fill="currentColor"/></svg>
+    </button>
+    <button class="rail-btn" data-tab="saved" data-tooltip="Saved Designs">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 3h10v14l-5-3-5 3z"/></svg>
+    </button>
+    <div class="rail-spacer"></div>
+    <button class="rail-btn" data-tab="help" data-tooltip="Help">
+      <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><path d="M7.8 8a2.2 2.2 0 0 1 4.4 0c0 1.5-2.2 1.6-2.2 3"/><circle cx="10" cy="14" r="0.7" fill="currentColor"/></svg>
+    </button>
+  </nav>
+
+  <section class="canvas-wrap">
+    <div class="canvas-meta">
+      <span class="dot"></span>
+      <span id="canvasMeta">2.81 : 1 · auto-fit</span>
+    </div>
+    <div class="ticket-frame" id="ticketFrame">
+      <div class="ticket-scaler" id="ticketScaler">
+        <div class="ticket" id="ticket">
+          <div class="bg-color" id="bgColor"></div>
+          <img class="bg-image" id="bgImage" alt="" style="display:none;">
+          <img class="photo-layer" id="photoLayer" alt="" style="display:none;">
+          <div class="fields" id="fields"></div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size: 11px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;">
+      <span><kbd>Click</kbd> select</span>
+      <span><kbd>Dbl-click</kbd> or <kbd>Enter</kbd> edit text</span>
+      <span><kbd>Drag</kbd> move</span>
+      <span><kbd>↑↓←→</kbd> nudge</span>
+      <span><kbd>Del</kbd> remove</span>
+    </div>
+  </section>
+
+  <aside class="panel" id="panel">
+    <div class="panel-handle" id="panelHandle">Editor</div>
+
+    <!-- DESIGN tab (selected field) -->
+    <div class="tab-pane" data-pane="design">
+      <div class="panel-header">
+        <h3 id="paneTitle">Selected field</h3>
+        <span class="panel-sub" id="paneSub">click a field to edit</span>
+      </div>
+      <div class="panel-body" id="fieldEditor">
+        <div class="empty-msg">
+          <span class="empty-icon">✦</span>
+          Click any text on the ticket to start editing.
+        </div>
+        <div class="panel-section">
+          <h4>Add</h4>
+          <button class="btn small" id="btnAddField" style="width:100%; justify-content:center;">
+            <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 4v12M4 10h12"/></svg>
+            Add new text field
+          </button>
+        </div>
+        <div class="panel-section">
+          <h4>All Fields</h4>
+          <div class="field-list" id="fieldList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THEMES tab -->
+    <div class="tab-pane hidden" data-pane="themes">
+      <div class="panel-header">
+        <h3>Themes</h3>
+        <span class="panel-sub">your text is preserved</span>
+      </div>
+      <div class="panel-body">
+        <div class="theme-list" id="themeList"></div>
+        <p class="helper">Switching a theme updates colors, fonts, and field positions. Field text is matched by ID, so what you've written stays put.</p>
+        <div class="panel-section">
+          <h4>Bake current layout into HTML</h4>
+          <button class="btn small" id="btnExportTheme" style="width:100%; justify-content:center;">
+            <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="10" height="14" rx="1.5"/><path d="M8 7h4M8 10h4M8 13h2"/></svg>
+            Copy current as theme code
+          </button>
+          <p class="helper">Designs the current state into a paste-able JS theme block. Open this HTML, find the <kbd>THEMES</kbd> const at the top of the script, replace the matching theme — that becomes your permanent default.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACKGROUND tab -->
+    <div class="tab-pane hidden" data-pane="background">
+      <div class="panel-header">
+        <h3>Background</h3>
+        <span class="panel-sub">solid · image · AI</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-section">
+          <h4>Color</h4>
+          <div class="row">
+            <input type="color" id="inpBgColor">
+            <input type="text" id="inpBgColorHex" maxlength="7" placeholder="#f5d547">
+          </div>
+          <div class="swatches" id="bgSwatches"></div>
+        </div>
+        <div class="panel-section">
+          <h4>Image</h4>
+          <div class="row">
+            <input type="file" id="inpBgImage" accept="image/*">
+          </div>
+          <div class="slider-row">
+            <label>Opacity</label>
+            <input type="range" class="slider" id="inpBgOpacity" min="0" max="100" value="100">
+            <span class="slider-val" id="lblBgOpacity">100%</span>
+          </div>
+          <div class="row">
+            <button class="btn small" id="btnRemoveBg" style="flex:1;">Remove</button>
+            <button class="btn small primary" id="btnAiBg" style="flex:1;">
+              <svg class="icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2l1.6 4.4L16 8l-4.4 1.6L10 14l-1.6-4.4L4 8l4.4-1.6L10 2z"/></svg>
+              AI Background
+            </button>
+          </div>
+          <p class="helper">AI uses your event name, venue, and theme to compose a prompt. Wire up <kbd>generateAiBackground()</kbd> to your image API.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHOTO tab -->
+    <div class="tab-pane hidden" data-pane="photo">
+      <div class="panel-header">
+        <h3>Photo Layer</h3>
+        <span class="panel-sub">behind the text</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-section">
+          <div class="row">
+            <input type="file" id="inpPhoto" accept="image/*">
+          </div>
+          <div class="slider-row">
+            <label>Opacity</label>
+            <input type="range" class="slider" id="inpPhotoOpacity" min="0" max="100" value="60">
+            <span class="slider-val" id="lblPhotoOpacity">60%</span>
+          </div>
+          <div class="row">
+            <label>Blend</label>
+            <select id="inpPhotoBlend">
+              <option value="normal">Normal</option>
+              <option value="multiply">Multiply</option>
+              <option value="screen">Screen</option>
+              <option value="overlay">Overlay</option>
+              <option value="luminosity">Luminosity</option>
+              <option value="hard-light">Hard Light</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-section">
+          <h4>Position & size</h4>
+          <div class="row">
+            <label>X / Y %</label>
+            <input type="number" id="inpPhotoX" min="-100" max="200" value="0">
+            <input type="number" id="inpPhotoY" min="-100" max="200" value="0">
+          </div>
+          <div class="row">
+            <label>W / H %</label>
+            <input type="number" id="inpPhotoW" min="10" max="200" value="100">
+            <input type="number" id="inpPhotoH" min="10" max="200" value="100">
+          </div>
+          <button class="btn small danger" id="btnRemovePhoto" style="width:100%; margin-top:8px;">Remove photo</button>
+        </div>
+        <p class="helper">Use this for a band photo behind the text — like the Ezra Furman ticket.</p>
+      </div>
+    </div>
+
+    <!-- SAVED tab -->
+    <div class="tab-pane hidden" data-pane="saved">
+      <div class="panel-header">
+        <h3>Saved Designs</h3>
+        <span class="panel-sub" id="savedCount"></span>
+      </div>
+      <div class="panel-body">
+        <div class="saved-list" id="savedList"></div>
+      </div>
+    </div>
+
+    <!-- HELP tab -->
+    <div class="tab-pane hidden" data-pane="help">
+      <div class="panel-header">
+        <h3>Shortcuts</h3>
+        <span class="panel-sub">essentials</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-section">
+          <h4>Editing</h4>
+          <p class="helper" style="margin-top:4px;line-height:1.7;">
+            <kbd>Click</kbd> — select a field<br>
+            <kbd>Dbl-click</kbd> or <kbd>Enter</kbd> — edit text<br>
+            <kbd>Drag</kbd> — move a field<br>
+            <kbd>↑↓←→</kbd> — nudge by 0.2%<br>
+            <kbd>Shift+↑↓←→</kbd> — nudge by 1%<br>
+            <kbd>Del</kbd> / <kbd>⌫</kbd> — delete field<br>
+            <kbd>Esc</kbd> — exit edit / deselect
+          </p>
+        </div>
+        <div class="panel-section">
+          <h4>About</h4>
+          <p class="helper" style="margin-top:4px;line-height:1.7;">
+            Designs save to your browser only — fully private, no accounts.<br>
+            Wire up <kbd>generateAiBackground()</kbd> in the script to enable real AI backgrounds via your image-gen API.
+          </p>
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<button class="btn primary panel-toggle-mobile" id="panelToggleMobile" aria-label="Open editor">
+  <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+</button>
+
+<!-- AI Modal -->
+<div class="modal-backdrop" id="aiModal">
+  <div class="modal">
+    <h3>✨ Generate AI Background</h3>
+    <p class="modal-sub">Describe the background you want. The prompt is auto-suggested from your event name, venue, and theme.</p>
+    <textarea id="aiPrompt" rows="4"></textarea>
+    <div class="help-block">
+      In production this calls a serverless function (Cloudflare Worker → Replicate / OpenAI / Stability) and loads the generated image as your background. For this prototype, <em>Generate</em> demonstrates the call shape and shows you exactly where to wire your API key inside <kbd>generateAiBackground()</kbd>.
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" id="aiCancel">Cancel</button>
+      <button class="btn" id="aiCopyPrompt">Copy prompt</button>
+      <button class="btn primary" id="aiGenerate">Generate</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="toast-dot"></span><span id="toastMsg"></span></div>
+
+<script>
+/* ============================================================
+ * DUBSTUBS v2 — single-file ticket designer prototype
+ * ============================================================ */
+
+// ---------- THEMES ----------
+const THEMES = {
+  'ticketmaster-yellow': {
+    name: 'Ticketmaster Yellow',
+    desc: 'Classic stub · black on warm yellow',
+    thumb: 'linear-gradient(180deg, #f5d547 0%, #e8c63a 100%)',
+    bgColor: '#f5d547', bgImage: null, photoLayer: null,
+    fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    textColor: '#000',
+    fields: [
+      { id: 'topCode',    role: 'topCode',     text: 'MH1114',          x: 1,   y: 4.5,  fontSize: 2.7, weight: 700, align: 'left' },
+      { id: 'fLine',      role: 'detail',      text: 'F = 1.50',        x: 2.5,   y: 18,  fontSize: 1.7, weight: 400, align: 'left' },
+      { id: 'dollar',     role: 'currency',    text: '$',                x: 1,   y: 18, fontSize: 1.7, weight: 400, align: 'left' },
+      { id: 'convCharge', role: 'label',       text: 'CONVENIENCE CHARGE', x: 1, y: 22, fontSize: 1.0, weight: 400, align: 'left' },
+      { id: 'sectionTL',  role: 'section',     text: 'GA2',             x: 1,   y: 33, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'secLabel',   role: 'label',       text: 'SEC./SEC.',       x: 5,   y: 41, fontSize: 1.0, weight: 400, align: 'left' },
+      { id: 'casLine',    role: 'detail',      text: 'CAS  2X',         x: 1,   y: 48, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'rowTL',      role: 'row',         text: 'GA9    12',       x: 1,   y: 60, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'rowLabel',   role: 'label',       text: 'ROW/RANGÉE  SEAT/SIÉGE', x: 1, y: 70, fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'barcodeRef', role: 'detail',      text: 'ZCS781A',         x: 1,   y: 78, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'dateShort',  role: 'dateShort',   text: '21JUL15',         x: 1,   y: 88, fontSize: 3.4, weight: 700, align: 'left' },
+      { id: 'cSecLbl',    role: 'label',       text: 'SEC./SEC.',           x: 24, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cRowLbl',    role: 'label',       text: 'ROW/RANGÉE',          x: 38, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cSeatLbl',   role: 'label',       text: 'SEAT/SIÉGE',          x: 50, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cPriceLbl',  role: 'label',       text: 'PRICE TYPE/PRIX TYPE', x: 60, y: 7, fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'gaFlr',      role: 'detail',      text: 'GA-FLR',          x: 24, y: 15, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'standing',   role: 'priceType',   text: 'STANDING',        x: 38, y: 15, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'price',      role: 'price',       text: '38.00',           x: 60, y: 15, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'url',        role: 'url',         text: 'DUBSTUBS.COM',    x: 50, y: 24, fontSize: 2.4, weight: 400, align: 'center' },
+      { id: 'eventName',  role: 'eventName',   text: 'BEIRUT',          x: 50, y: 38, fontSize: 6.7, weight: 700, align: 'center' },
+      { id: 'support',    role: 'support',     text: 'WITH JOSH & CLAIRE', x: 50, y: 53, fontSize: 1.6, weight: 400, align: 'center' },
+      { id: 'venue',      role: 'venue',       text: 'STOCKTON COMPANY', x: 50, y: 64, fontSize: 4.4, weight: 700, align: 'center' },
+      { id: 'address',    role: 'address',     text: 'ROXTON ROAD , TORONTO', x: 50, y: 74.5, fontSize: 2.0, weight: 400, align: 'center' },
+      { id: 'date',       role: 'date',        text: 'SAT NOV 14 2015 DRS 7PM', x: 50, y: 85, fontSize: 3.0, weight: 700, align: 'center' },
+      { id: 'priceLabel', role: 'priceLabel',  text: 'ADULT  ISH',      x: 78, y: 2,  fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'time',       role: 'time',        text: '15:52',           x: 88, y: 11, fontSize: 1.8, weight: 400, align: 'left' },
+      { id: 'ticketNum',  role: 'ticketNumber',text: '77-20850',        x: 88, y: 17, fontSize: 1.8, weight: 400, align: 'left' },
+      { id: 'sectionTR',  role: 'section',     text: 'GA2',             x: 88, y: 32, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'secLabelR',  role: 'label',       text: 'SEC./SEC.',       x: 88, y: 40, fontSize: 1.0, weight: 400, align: 'left' },
+      { id: 'barcode',    role: 'barcode',     text: 'CAZCS781',        x: 88, y: 47, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'rowTR',      role: 'row',         text: 'GA9',             x: 78, y: 60, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'priceR',     role: 'price',       text: 'A    36.50',      x: 86, y: 70, fontSize: 1.4, weight: 400, align: 'left' },
+      { id: 'rowLabelR',  role: 'label',       text: 'ROW/RANGÉE',      x: 88, y: 67, fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'seatTR',     role: 'seat',        text: '12',              x: 92, y: 88, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'seatLblR',   role: 'label',       text: 'SEAT/SIÉGE',      x: 60, y: 95, fontSize: 0.8, weight: 400, align: 'left' },
+      // ── Stub / barcode / vertical edge ─────────────────────────
+      { id: 'perforation',   type: 'perforation', x: 82,   y: 50, w: 0.4, h: 95, color: '#000', zIndex: 4 },
+      { id: 'barcodeBars',   type: 'barcode',     x: 92,   y: 78, w: 14, h: 8, color: '#000', zIndex: 4, fontSize: 1, weight: 400, align: 'center' },
+      { id: 'barcodeDigits', role: 'detail',      text: '0249821524361  2', x: 87,   y: 82, fontSize: 1.0, weight: 400, align: 'center', rotation: -90, color: '#000' },
+      { id: 'urlVertical',   role: 'url',         text: 'DUBSTUBS.COM',     x: 95,   y: 42, fontSize: 2.0, weight: 700, align: 'center', rotation: -90, color: '#000' },
+      { id: 'instaVertical', role: 'tag',         text: 'INSTAGRAM: @ELSHIMMER', x: 97, y: 42, fontSize: 0.95, weight: 400, align: 'center', rotation: -90, color: '#000' },
+      { id: 'termsLine1',    role: 'terms',       text: 'TAXES INCL. SUBJECT TO CONDITIONS HEREON', x: 99, y: 30, fontSize: 0.7, weight: 400, align: 'center', rotation: -90, color: '#000' },
+      { id: 'termsLine2',    role: 'terms',       text: 'NO REFUNDS · NO EXCHANGES · RESALE INVALIDATES TICKET', x: 99, y: 65, fontSize: 0.7, weight: 400, align: 'center', rotation: -90, color: '#000' },
+      // ── Extra ground details ───────────────────────────────────
+      { id: 'doorTime',      role: 'doorTime',    text: 'DOORS 6:00 PM',    x: 35,   y: 96, fontSize: 1.2, weight: 400, align: 'left', color: '#000' },
+      { id: 'gateLabel',     role: 'gate',        text: 'GATE 2',           x: 56,   y: 96, fontSize: 1.2, weight: 400, align: 'left', color: '#000' },
+      { id: 'ageNote',       role: 'age',         text: '19+ ALL AGES',     x: 68,   y: 96, fontSize: 1.0, weight: 400, align: 'left', color: '#000' },
+      { id: 'orderRef',      role: 'orderRef',    text: 'ORDER #4498-21',   x: 1,    y: 96, fontSize: 1.0, weight: 400, align: 'left', color: '#000' },
+      { id: 'eventTag',      role: 'eventTag',    text: 'TOUR · 2015',      x: 24,   y: 24, fontSize: 1.4, weight: 400, align: 'left', color: '#000' },
+    ]
+  },
+
+  'silver-dollar-lilac': {
+    name: 'Lilac Photo',
+    desc: 'Photo overlay · soft purple',
+    thumb: 'linear-gradient(180deg, #b1a8d8 0%, #9189c1 100%)',
+    bgColor: '#b1a8d8', bgImage: null,
+    photoLayer: { x: 18, y: 0, w: 70, h: 100, opacity: 0.55, blend: 'multiply' },
+    fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    textColor: '#1a1730',
+    fields: [
+      { id: 'topCode',    role: 'topCode',     text: "KYLE COULDN'T FINISH DIM SUM", x: 1, y: 2, fontSize: 2.6, weight: 700, align: 'left' },
+      { id: 'dayOfWeek',  role: 'dayOfWeek',   text: 'MONDAY',          x: 1,   y: 12, fontSize: 2.4, weight: 400, align: 'left' },
+      { id: 'dollar',     role: 'currency',    text: '$',                x: 1,   y: 18, fontSize: 1.7, weight: 400, align: 'left' },
+      { id: 'convCharge', role: 'label',       text: 'CONVENIENCE CHARGE', x: 1, y: 22, fontSize: 1.0, weight: 400, align: 'left' },
+      { id: 'note1',      role: 'message',     text: 'SHOWS',           x: 1,   y: 34, fontSize: 2.4, weight: 400, align: 'left' },
+      { id: 'secLabel',   role: 'label',       text: 'SEC./SEC.',       x: 5,   y: 41, fontSize: 1.0, weight: 400, align: 'left' },
+      { id: 'note2',      role: 'message',     text: 'ARE SO',          x: 1,   y: 48, fontSize: 2.4, weight: 400, align: 'left' },
+      { id: 'note3',      role: 'message',     text: 'TOUGH',           x: 1,   y: 60, fontSize: 2.4, weight: 400, align: 'left' },
+      { id: 'rowLabel',   role: 'label',       text: 'ROW/RANGÉE  SEAT/SIÉGE', x: 1, y: 70, fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'barcodeRef', role: 'detail',      text: 'KRKK3228',        x: 1,   y: 78, fontSize: 2.4, weight: 400, align: 'left' },
+      { id: 'dateShort',  role: 'dateShort',   text: '28MAR16',         x: 1,   y: 88, fontSize: 3.4, weight: 700, align: 'left' },
+      { id: 'cSecLbl',    role: 'label',       text: 'SEC./SEC.',       x: 24, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cRowLbl',    role: 'label',       text: 'ROW/RANGÉE',      x: 38, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cSeatLbl',   role: 'label',       text: 'SEAT/SIÉGE',      x: 50, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cPriceLbl',  role: 'label',       text: 'PRICE TYPE/PRIX TYPE', x: 60, y: 7, fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'support',    role: 'support',     text: 'KISSES',          x: 50, y: 13, fontSize: 2.4, weight: 400, align: 'center' },
+      { id: 'price',      role: 'price',       text: '12.00',           x: 60, y: 11, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'subline',    role: 'subline',     text: 'KATIE & KYLE SEE THE', x: 50, y: 22, fontSize: 2.0, weight: 400, align: 'center' },
+      { id: 'eventName',  role: 'eventName',   text: 'EZRA FURMAN',     x: 50, y: 32, fontSize: 6.6, weight: 700, align: 'center' },
+      { id: 'support2',   role: 'support',     text: 'SLEEPY KITTY AND THE FELLOWSHIP', x: 50, y: 49, fontSize: 1.4, weight: 400, align: 'center' },
+      { id: 'venue',      role: 'venue',       text: 'THE SILVER DOLLAR ROOM', x: 50, y: 64, fontSize: 4.0, weight: 700, align: 'center' },
+      { id: 'address',    role: 'address',     text: '468 SPADINA AVE, TORONTO', x: 50, y: 76, fontSize: 2.0, weight: 400, align: 'center' },
+      { id: 'date',       role: 'date',        text: 'MON MAR 28 2016 DRS 8:30PM', x: 50, y: 89, fontSize: 4.0, weight: 700, align: 'center' },
+      { id: 'time',       role: 'time',        text: '11:11',           x: 88, y: 11, fontSize: 1.8, weight: 400, align: 'left' },
+      { id: 'ticketNum',  role: 'ticketNumber',text: '77-20850',        x: 88, y: 17, fontSize: 1.8, weight: 400, align: 'left' },
+      { id: 'sectionTR',  role: 'section',     text: 'GA2',             x: 88, y: 32, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'barcode',    role: 'barcode',     text: 'KRKK3228',        x: 88, y: 47, fontSize: 2.6, weight: 400, align: 'left' },
+      { id: 'rowTR',      role: 'row',         text: 'GA9',             x: 78, y: 60, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'priceR',     role: 'price',       text: 'A    12.00',      x: 86, y: 70, fontSize: 1.4, weight: 400, align: 'left' },
+      { id: 'seatTR',     role: 'seat',        text: '3',               x: 92, y: 88, fontSize: 3.6, weight: 700, align: 'left' },
+      // ── Stub / barcode / vertical edge ─────────────────────────
+      { id: 'perforation',   type: 'perforation', x: 82,   y: 50, w: 0.4, h: 95, color: '#1a1730', zIndex: 4 },
+      { id: 'barcodeBars',   type: 'barcode',     x: 92,   y: 78, w: 14, h: 8, color: '#1a1730', zIndex: 4, fontSize: 1, weight: 400, align: 'center' },
+      { id: 'barcodeDigits', role: 'detail',      text: 'MADEUPBARCODE',         x: 87,   y: 82, fontSize: 1.0, weight: 400, align: 'center', rotation: -90, color: '#1a1730' },
+      { id: 'urlVertical',   role: 'url',         text: 'DUBSTUBS.COM',          x: 95,   y: 42, fontSize: 2.0, weight: 700, align: 'center', rotation: -90, color: '#1a1730' },
+      { id: 'venueVertical', role: 'tag',         text: 'THE SILVER DOLLAR ROOM', x: 97,  y: 42, fontSize: 0.95, weight: 400, align: 'center', rotation: -90, color: '#1a1730' },
+      { id: 'termsLine1',    role: 'terms',       text: 'TAXES INCL. · NO REFUNDS · NO EXCHANGES', x: 99, y: 30, fontSize: 0.7, weight: 400, align: 'center', rotation: -90, color: '#1a1730' },
+      { id: 'termsLine2',    role: 'terms',       text: 'RESALE INVALIDATES TICKET',                x: 99, y: 65, fontSize: 0.7, weight: 400, align: 'center', rotation: -90, color: '#1a1730' },
+      // ── Extra ground details ───────────────────────────────────
+      { id: 'doorTime',      role: 'doorTime',    text: 'DOORS 8:30 PM',    x: 35,   y: 96, fontSize: 1.2, weight: 400, align: 'left', color: '#1a1730' },
+      { id: 'ageNote',       role: 'age',         text: '19+',              x: 56,   y: 96, fontSize: 1.2, weight: 400, align: 'left', color: '#1a1730' },
+      { id: 'orderRef',      role: 'orderRef',    text: 'ORDER #11-3228',   x: 1,    y: 96, fontSize: 1.0, weight: 400, align: 'left', color: '#1a1730' },
+      { id: 'eventTag',      role: 'eventTag',    text: 'INDIE NIGHT',      x: 24,   y: 24, fontSize: 1.4, weight: 400, align: 'left', color: '#1a1730' },
+      { id: 'pricingType',   role: 'priceType',   text: 'GA STANDING',      x: 24,   y: 11, fontSize: 2.6, weight: 400, align: 'left', color: '#1a1730' },
+    ]
+  },
+
+  'red-rocks-dark': {
+    name: 'Red Rocks Dark',
+    desc: 'Stadium dark · red & gold',
+    thumb: 'linear-gradient(180deg, #0c0d3a 0%, #1d1f5a 50%, #d11a2c 100%)',
+    bgColor: '#0c0d3a', bgImage: null, photoLayer: null,
+    fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    textColor: '#ffffff',
+    fields: [
+      { id: 'topCode',    role: 'topCode',     text: 'RED ROCKS AMPITHEATRE', x: 1, y: 2, fontSize: 3.0, weight: 700, align: 'left' },
+      { id: 'dayOfWeek',  role: 'dayOfWeek',   text: 'MONDAY',          x: 1,   y: 12, fontSize: 2.4, weight: 400, align: 'left', color: '#ffffff' },
+      { id: 'dollar',     role: 'currency',    text: '$',                x: 1,   y: 18, fontSize: 1.7, weight: 400, align: 'left', color: '#d11a2c' },
+      { id: 'convCharge', role: 'label',       text: 'CONVENIENCE CHARGE', x: 1, y: 22, fontSize: 1.0, weight: 400, align: 'left', color: '#d11a2c' },
+      { id: 'note1',      role: 'message',     text: 'ROAD',            x: 1,   y: 34, fontSize: 3.0, weight: 700, align: 'left', color: '#d11a2c' },
+      { id: 'note2',      role: 'message',     text: 'TRIP TO',         x: 1,   y: 48, fontSize: 3.0, weight: 700, align: 'left', color: '#d11a2c' },
+      { id: 'note3',      role: 'message',     text: 'COLORADO',        x: 1,   y: 60, fontSize: 3.0, weight: 700, align: 'left', color: '#d11a2c' },
+      { id: 'barcodeRef', role: 'detail',      text: 'JSH081423',       x: 1,   y: 78, fontSize: 2.4, weight: 400, align: 'left', color: '#d11a2c' },
+      { id: 'dateShort',  role: 'dateShort',   text: '14AUG23',         x: 1,   y: 88, fontSize: 3.4, weight: 700, align: 'left', color: '#d11a2c' },
+      { id: 'cSecLbl',    role: 'label',       text: 'SEC./SEC.',       x: 24, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cRowLbl',    role: 'label',       text: 'ROW/RANGÉE',      x: 38, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cSeatLbl',   role: 'label',       text: 'SEAT/SIÉGE',      x: 50, y: 7,  fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'cPriceLbl',  role: 'label',       text: 'PRICE TYPE/PRIX TYPE', x: 60, y: 7, fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'support',    role: 'support',     text: 'SNOOGLES',        x: 38, y: 11, fontSize: 2.0, weight: 400, align: 'left', color: '#ffd400' },
+      { id: 'price',      role: 'price',       text: '90.50',           x: 60, y: 11, fontSize: 2.6, weight: 400, align: 'left', color: '#ffd400' },
+      { id: 'subline',    role: 'subline',     text: 'JORDON AND SHANNON SEE', x: 50, y: 22, fontSize: 2.4, weight: 400, align: 'center', color: '#ffd400' },
+      { id: 'eventName',  role: 'eventName',   text: 'THE STROKES',     x: 50, y: 36, fontSize: 7.0, weight: 700, align: 'center', color: '#ffd400' },
+      { id: 'support2',   role: 'support',     text: 'WEYES BLOOD',     x: 50, y: 50, fontSize: 2.4, weight: 400, align: 'center', color: '#ffd400' },
+      { id: 'venue',      role: 'venue',       text: 'LIVE AT RED ROCKS', x: 50, y: 64, fontSize: 4.4, weight: 700, align: 'center', color: '#ffd400' },
+      { id: 'address',    role: 'address',     text: '18300 W ALAMEDA PKWY, MORRISON\nCO 80401, UNITED STATES', x: 50, y: 78, fontSize: 1.8, weight: 400, align: 'center', color: '#ffffff' },
+      { id: 'date',       role: 'date',        text: 'MON AUG 14 2023 DRS 7:00PM', x: 50, y: 92, fontSize: 4.0, weight: 700, align: 'center', color: '#ffd400' },
+      { id: 'time',       role: 'time',        text: '11:11',           x: 78, y: 11, fontSize: 1.8, weight: 400, align: 'left', color: '#ffffff' },
+      { id: 'ticketNum',  role: 'ticketNumber',text: 'JSH081423',       x: 78, y: 17, fontSize: 1.8, weight: 400, align: 'left', color: '#ffffff' },
+      { id: 'sectionTR',  role: 'section',     text: 'GA2',             x: 78, y: 32, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'priceType',  role: 'priceType',   text: 'STANDING',        x: 78, y: 41, fontSize: 1.6, weight: 400, align: 'left' },
+      { id: 'rowTR',      role: 'row',         text: 'GA9',             x: 78, y: 60, fontSize: 3.6, weight: 700, align: 'left' },
+      { id: 'priceR',     role: 'price',       text: 'ROW',             x: 78, y: 67, fontSize: 0.9, weight: 400, align: 'left' },
+      { id: 'seatTR',     role: 'seat',        text: '12',              x: 92, y: 88, fontSize: 3.6, weight: 700, align: 'left' },
+      // ── Stub / barcode / vertical edge ─────────────────────────
+      { id: 'perforation',   type: 'perforation', x: 82,   y: 50, w: 0.4, h: 95, color: '#ffffff', zIndex: 4 },
+      { id: 'barcodeBars',   type: 'barcode',     x: 92,   y: 78, w: 14, h: 8, color: '#ffffff', zIndex: 4, fontSize: 1, weight: 400, align: 'center' },
+      { id: 'barcodeDigits', role: 'detail',      text: 'JSH081423MADEUP',     x: 87,   y: 82, fontSize: 1.0, weight: 400, align: 'center', rotation: -90, color: '#ffffff' },
+      { id: 'urlVertical',   role: 'url',         text: 'DUBSTUBS.COM',         x: 95,   y: 42, fontSize: 2.0, weight: 700, align: 'center', rotation: -90, color: '#ffd400' },
+      { id: 'venueVertical', role: 'tag',         text: 'LIVE AT RED ROCKS',    x: 97,   y: 42, fontSize: 0.95, weight: 400, align: 'center', rotation: -90, color: '#ffffff' },
+      { id: 'termsLine1',    role: 'terms',       text: 'TAXES INCL. · NO REFUNDS · NO EXCHANGES', x: 99, y: 30, fontSize: 0.7, weight: 400, align: 'center', rotation: -90, color: '#ffffff' },
+      { id: 'termsLine2',    role: 'terms',       text: 'RESALE INVALIDATES TICKET',                x: 99, y: 65, fontSize: 0.7, weight: 400, align: 'center', rotation: -90, color: '#ffffff' },
+      // ── Extra ground details ───────────────────────────────────
+      { id: 'doorTime',      role: 'doorTime',    text: 'DOORS 7:00 PM',    x: 35,   y: 96, fontSize: 1.2, weight: 400, align: 'left', color: '#ffffff' },
+      { id: 'gateLabel',     role: 'gate',        text: 'GATE 4',           x: 56,   y: 96, fontSize: 1.2, weight: 400, align: 'left', color: '#ffd400' },
+      { id: 'ageNote',       role: 'age',         text: 'ALL AGES',         x: 68,   y: 96, fontSize: 1.0, weight: 400, align: 'left', color: '#ffffff' },
+      { id: 'orderRef',      role: 'orderRef',    text: 'ORDER #2023-081',  x: 1,    y: 96, fontSize: 1.0, weight: 400, align: 'left', color: '#d11a2c' },
+      { id: 'eventTag',      role: 'eventTag',    text: 'STADIUM TOUR',     x: 24,   y: 24, fontSize: 1.4, weight: 400, align: 'left', color: '#ffd400' },
+    ]
+  }
+};
+
+const SWATCHES = ['#f5d547','#ffffff','#000000','#b1a8d8','#0c0d3a','#d11a2c','#ffd400','#10b981','#ec4899','#f97316','#3b82f6','#8b5cf6','#fb7185','#94a3b8','#0a0a0a','#fde68a'];
+
+// ---------- STATE ----------
+let state = {
+  themeKey: 'ticketmaster-yellow',
+  bgColor: '#f5d547', bgImage: null, bgOpacity: 100,
+  photo: null, photoOpacity: 60, photoBlend: 'multiply',
+  photoX: 18, photoY: 0, photoW: 70, photoH: 100,
+  fontFamily: THEMES['ticketmaster-yellow'].fontFamily,
+  textColor: '#000',
+  fields: [],
+  selectedId: null,
+  designName: 'Untitled',
+  activeTab: 'design',
+};
+
+// ---------- DOM ----------
+const $ = id => document.getElementById(id);
+const ticket = $('ticket');
+const fieldsEl = $('fields');
+const bgColorEl = $('bgColor');
+const bgImageEl = $('bgImage');
+const photoEl = $('photoLayer');
+
+// ---------- TABS ----------
+function setTab(name) {
+  state.activeTab = name;
+  document.querySelectorAll('.rail-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('hidden', p.dataset.pane !== name));
+}
+document.querySelectorAll('.rail-btn').forEach(b => {
+  b.addEventListener('click', () => setTab(b.dataset.tab));
+});
+
+// ---------- THEMES UI ----------
+function renderThemeList() {
+  const list = $('themeList');
+  list.innerHTML = '';
+  Object.entries(THEMES).forEach(([key, t]) => {
+    const card = document.createElement('div');
+    card.className = 'theme-card' + (state.themeKey === key ? ' active' : '');
+    card.innerHTML = `
+      <div class="theme-thumb" style="background:${t.thumb};"></div>
+      <div class="theme-info">
+        <div class="theme-name">${t.name}</div>
+        <div class="theme-desc">${t.desc}</div>
+      </div>`;
+    card.addEventListener('click', () => { loadTheme(key, true); toast('Theme: ' + t.name); });
+    list.appendChild(card);
+  });
+}
+
+function loadTheme(key, preserveText = false) {
+  const t = THEMES[key]; if (!t) return;
+  const oldTexts = preserveText
+    ? Object.fromEntries(state.fields.map(f => [f.id, f.text]))
+    : {};
+  state.themeKey = key;
+  state.bgColor = t.bgColor;
+  state.bgImage = t.bgImage;
+  state.bgOpacity = 100;
+  state.photo = null;
+  state.photoOpacity = (t.photoLayer && t.photoLayer.opacity) ? t.photoLayer.opacity * 100 : 60;
+  state.photoBlend = (t.photoLayer && t.photoLayer.blend) || 'multiply';
+  if (t.photoLayer) {
+    state.photoX = t.photoLayer.x; state.photoY = t.photoLayer.y;
+    state.photoW = t.photoLayer.w; state.photoH = t.photoLayer.h;
+  }
+  state.fontFamily = t.fontFamily;
+  state.textColor = t.textColor;
+  state.fields = t.fields.map(f => ({
+    ...f,
+    text: oldTexts[f.id] || f.text,
+    color: f.color || t.textColor,
+    locked: false,
+    rotation: f.rotation || 0,
+    letterSpacing: f.letterSpacing || 0,
+  }));
+  state.selectedId = null;
+  syncControls();
+  renderAll();
+}
+
+// ---------- RENDER ----------
+function renderAll() {
+  bgColorEl.style.background = state.bgColor;
+  bgColorEl.style.opacity = state.bgOpacity / 100;
+  if (state.bgImage) {
+    bgImageEl.src = state.bgImage;
+    bgImageEl.style.display = '';
+    bgImageEl.style.opacity = state.bgOpacity / 100;
+  } else {
+    bgImageEl.style.display = 'none';
+  }
+  if (state.photo) {
+    photoEl.src = state.photo;
+    photoEl.style.display = '';
+    photoEl.style.left = state.photoX + '%';
+    photoEl.style.top = state.photoY + '%';
+    photoEl.style.width = state.photoW + '%';
+    photoEl.style.height = state.photoH + '%';
+    photoEl.style.opacity = state.photoOpacity / 100;
+    photoEl.style.mixBlendMode = state.photoBlend;
+    photoEl.style.objectFit = 'cover';
+  } else {
+    photoEl.style.display = 'none';
+  }
+  ticket.style.fontFamily = state.fontFamily;
+  renderFields();
+  renderFieldList();
+  renderThemeList();
+}
+
+// Base design canvas — fixed pixel dimensions.
+const BASE_W = 1300;
+const BASE_H = 462.6;
+
+function applyScale() {
+  const frame = document.getElementById('ticketFrame');
+  if (!frame) return;
+  const w = frame.clientWidth;
+  const scale = w / BASE_W;
+  ticket.style.transform = `scale(${scale})`;
+}
+
+function fontSizePx(fs) { return ((fs || 1) / 100) * BASE_W; }
+
+function getVAlign(f) {
+  if (f.vAlign === 'top' || f.vAlign === 'middle' || f.vAlign === 'bottom') return f.vAlign;
+  if (f.y < 8) return 'top';
+  if (f.y > 92) return 'bottom';
+  return 'middle';
+}
+
+function renderFields() {
+  fieldsEl.innerHTML = '';
+  state.fields.forEach(f => {
+    const el = document.createElement('div');
+    el.className = 'field' + (state.selectedId === f.id ? ' selected' : '') + (f.locked ? ' locked' : '');
+    el.dataset.id = f.id;
+    el.style.left = f.x + '%';
+    el.style.top = f.y + '%';
+    const vAlign = getVAlign(f);
+    const yT = vAlign === 'top' ? '0%' : vAlign === 'bottom' ? '-100%' : '-50%';
+    let baseT = `translate(-50%, ${yT})`;
+    if (f.align === 'left') baseT = `translate(0%, ${yT})`;
+    if (f.align === 'right') baseT = `translate(-100%, ${yT})`;
+    el.style.transform = `${baseT} rotate(${f.rotation || 0}deg)`;
+    el.style.color = f.color || state.textColor;
+    el.style.fontSize = fontSizePx(f.fontSize) + 'px';
+    el.style.fontWeight = f.weight || 400;
+    el.style.letterSpacing = (f.letterSpacing || 0) + 'px';
+    el.style.textAlign = f.align || 'left';
+    el.style.zIndex = f.zIndex || 5;
+
+    const isVisual = f.type === 'barcode' || f.type === 'perforation';
+    let textEl = null;
+    if (isVisual) {
+      el.classList.add('type-' + f.type);
+      if (f.w) el.style.width = f.w + '%';
+      if (f.h) el.style.height = f.h + '%';
+      const vis = document.createElement('div');
+      vis.className = 'field-vis';
+      el.appendChild(vis);
+    } else {
+      textEl = document.createElement('span');
+      textEl.className = 'field-text';
+      textEl.contentEditable = 'false';
+      textEl.spellcheck = false;
+      textEl.innerText = f.text;
+      el.appendChild(textEl);
+    }
+
+    const bubble = document.createElement('div');
+    bubble.className = 'field-bubble';
+    bubble.innerHTML = `
+      <span class="role-label">${f.role || f.type || 'field'}</span>
+      <div class="sep"></div>
+      ${isVisual ? '' : `<button data-act="edit" title="Edit text"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4l3 3-9 9H5v-3z"/></svg></button>`}
+      <button data-act="lock" title="${f.locked ? 'Unlock' : 'Lock'}">${f.locked ? '🔓' : '🔒'}</button>
+      <button data-act="dup" title="Duplicate"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="6" width="10" height="10" rx="1.5"/><path d="M4 14V5a1 1 0 011-1h9"/></svg></button>
+      <button data-act="del" class="danger" title="Delete"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 6h10M8 6V4h4v2M7 6l1 10h4l1-10"/></svg></button>
+    `;
+    bubble.addEventListener('pointerdown', e => e.stopPropagation());
+    bubble.addEventListener('click', e => {
+      const btn = e.target.closest('button'); if (!btn) return;
+      const act = btn.dataset.act;
+      if (act === 'edit') enterEdit(el, f, textEl);
+      else if (act === 'lock') { f.locked = !f.locked; renderFields(); renderFieldEditor(); }
+      else if (act === 'dup') {
+        const newF = { ...f, id: 'f_' + Math.random().toString(36).slice(2,9), x: f.x + 3, y: f.y + 3 };
+        state.fields.push(newF); selectField(newF.id); renderAll();
+      }
+      else if (act === 'del') {
+        state.fields = state.fields.filter(x => x.id !== f.id);
+        state.selectedId = null; renderAll();
+      }
+    });
+    el.appendChild(bubble);
+
+    attachFieldHandlers(el, f, textEl);
+    fieldsEl.appendChild(el);
+  });
+}
+
+function enterEdit(el, field, textEl) {
+  el.classList.add('editing');
+  textEl.contentEditable = 'true';
+  textEl.focus();
+  document.getSelection().selectAllChildren(textEl);
+}
+
+function attachFieldHandlers(el, field, textEl) {
+  el.addEventListener('pointerdown', (e) => {
+    if (textEl && textEl.contentEditable === 'true') return;
+    if (e.target.closest('.field-bubble')) return;
+    if (field.locked) { selectField(field.id); return; }
+    e.preventDefault();
+    el.setPointerCapture(e.pointerId);
+    selectField(field.id);
+    const startX = e.clientX, startY = e.clientY;
+    const startFx = field.x, startFy = field.y;
+    const rect = ticket.getBoundingClientRect();
+    const tw = rect.width, th = rect.height;
+    let didMove = false;
+    const onMove = (ev) => {
+      const dx = ev.clientX - startX, dy = ev.clientY - startY;
+      if (!didMove && (Math.abs(dx) > 2 || Math.abs(dy) > 2)) didMove = true;
+      if (!didMove) return;
+      field.x = Math.max(-5, Math.min(105, startFx + (dx / tw) * 100));
+      field.y = Math.max(-5, Math.min(105, startFy + (dy / th) * 100));
+      el.style.left = field.x + '%';
+      el.style.top = field.y + '%';
+    };
+    const onUp = () => {
+      el.releasePointerCapture(e.pointerId);
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+      el.removeEventListener('pointercancel', onUp);
+      if (didMove) renderFieldEditor();
+    };
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onUp);
+    el.addEventListener('pointercancel', onUp);
+  });
+
+  if (textEl) {
+    el.addEventListener('dblclick', (e) => {
+      if (field.locked) return;
+      e.preventDefault(); e.stopPropagation();
+      enterEdit(el, field, textEl);
+    });
+    textEl.addEventListener('blur', () => {
+      el.classList.remove('editing');
+      textEl.contentEditable = 'false';
+      field.text = textEl.innerText;
+      renderFieldList();
+      if (state.selectedId === field.id) renderFieldEditor();
+    });
+    textEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') textEl.blur();
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); textEl.blur(); }
+    });
+  }
+}
+
+function selectField(id) {
+  state.selectedId = id;
+  document.querySelectorAll('.field').forEach(el => el.classList.toggle('selected', el.dataset.id === id));
+  document.querySelectorAll('.field-chip').forEach(el => el.classList.toggle('selected', el.dataset.id === id));
+  setTab('design');
+  renderFieldEditor();
+}
+
+// ---------- FIELD EDITOR (panel) ----------
+function renderFieldEditor() {
+  const editor = $('fieldEditor');
+  const f = state.fields.find(x => x.id === state.selectedId);
+  if (!f) {
+    editor.innerHTML = `
+      <div class="empty-msg">
+        <span class="empty-icon">✦</span>
+        Click any text on the ticket to start editing.
+      </div>
+      <div class="panel-section">
+        <h4>Add</h4>
+        <button class="btn small" id="btnAddField" style="width:100%; justify-content:center;">
+          <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 4v12M4 10h12"/></svg>
+          Add new text field
+        </button>
+      </div>
+      <div class="panel-section">
+        <h4>All Fields</h4>
+        <div class="field-list" id="fieldList"></div>
+      </div>`;
+    $('btnAddField').addEventListener('click', addNewField);
+    renderFieldList();
+    $('paneTitle').textContent = 'Selected field';
+    $('paneSub').textContent = 'click a field to edit';
+    return;
+  }
+  $('paneTitle').textContent = f.role || 'Field';
+  $('paneSub').textContent = '#' + f.id;
+
+  editor.innerHTML = `
+    <div class="panel-section" style="padding-top:0;border-top:none;">
+      <h4>Text</h4>
+      <textarea id="fText" rows="2"${f.type && f.type !== 'text' ? ' placeholder="(visual element — no text)" disabled' : ''}>${escapeHtml(f.text || '')}</textarea>
+    </div>
+    <div class="panel-section">
+      <h4>Style</h4>
+      <div class="row">
+        <label>Color</label>
+        <input type="color" id="fColor" value="${rgbToHex(f.color || state.textColor)}">
+        <input type="text" id="fColorHex" value="${rgbToHex(f.color || state.textColor)}" maxlength="7">
+      </div>
+      <div class="row">
+        <label>Align</label>
+        <div class="seg" id="fAlign" style="flex:1;">
+          <button data-align="left" class="${f.align==='left'?'active':''}">Left</button>
+          <button data-align="center" class="${f.align==='center'?'active':''}">Center</button>
+          <button data-align="right" class="${f.align==='right'?'active':''}">Right</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>Weight</label>
+        <div class="seg" id="fWeight" style="flex:1;">
+          <button data-weight="400" class="${f.weight==400?'active':''}">Reg</button>
+          <button data-weight="600" class="${f.weight==600?'active':''}">Med</button>
+          <button data-weight="700" class="${f.weight==700?'active':''}">Bold</button>
+        </div>
+      </div>
+      <div class="slider-row">
+        <label>Size</label>
+        <input type="range" class="slider" id="fSize" min="0.6" max="14" step="0.1" value="${f.fontSize || 1}">
+        <span class="slider-val" id="fSizeVal">${(f.fontSize || 1).toFixed(1)}</span>
+      </div>
+      <div class="slider-row">
+        <label>Track</label>
+        <input type="range" class="slider" id="fLetter" min="-3" max="20" step="0.5" value="${f.letterSpacing || 0}">
+        <span class="slider-val" id="fLetterVal">${f.letterSpacing || 0}</span>
+      </div>
+      <div class="slider-row">
+        <label>Rotate</label>
+        <input type="range" class="slider" id="fRot" min="-180" max="180" step="5" value="${f.rotation || 0}">
+        <span class="slider-val" id="fRotVal">${f.rotation || 0}°</span>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h4>Position</h4>
+      <div class="row">
+        <label>X / Y %</label>
+        <input type="number" id="fX" min="-5" max="105" step="0.5" value="${f.x.toFixed(1)}">
+        <input type="number" id="fY" min="-5" max="105" step="0.5" value="${f.y.toFixed(1)}">
+      </div>
+      ${f.type && f.type !== 'text' ? `
+      <div class="row">
+        <label>W / H %</label>
+        <input type="number" id="fW" min="0.1" max="100" step="0.1" value="${f.w || 10}">
+        <input type="number" id="fH" min="0.1" max="100" step="0.1" value="${f.h || 10}">
+      </div>` : ''}
+      <div class="row">
+        <label>Layer</label>
+        <input type="number" id="fZ" min="1" max="99" value="${f.zIndex || 5}">
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="row">
+        <button class="btn small" id="fLock" style="flex:1;">${f.locked ? '🔓 Unlock' : '🔒 Lock'}</button>
+        <button class="btn small" id="fDup" style="flex:1;">Duplicate</button>
+      </div>
+      <button class="btn small danger" id="fDelete" style="width:100%; margin-top:6px;">
+        <svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 6h10M8 6V4h4v2M7 6l1 10h4l1-10"/></svg>
+        Delete field
+      </button>
+    </div>
+    <div class="panel-section">
+      <h4>All Fields</h4>
+      <div class="field-list" id="fieldList"></div>
+    </div>`;
+
+  const upd = () => renderFields();
+  $('fText').addEventListener('input', e => { f.text = e.target.value; upd(); renderFieldList(); });
+
+  $('fColor').addEventListener('input', e => { f.color = e.target.value; $('fColorHex').value = e.target.value; upd(); });
+  $('fColorHex').addEventListener('input', e => {
+    const v = e.target.value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) { f.color = v; $('fColor').value = v; upd(); }
+  });
+
+  $('fAlign').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    f.align = b.dataset.align;
+    $('fAlign').querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+    upd();
+  }));
+  $('fWeight').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    f.weight = parseInt(b.dataset.weight);
+    $('fWeight').querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+    upd();
+  }));
+
+  $('fSize').addEventListener('input', e => { f.fontSize = parseFloat(e.target.value); $('fSizeVal').textContent = f.fontSize.toFixed(1); upd(); });
+  $('fLetter').addEventListener('input', e => { f.letterSpacing = parseFloat(e.target.value); $('fLetterVal').textContent = f.letterSpacing; upd(); });
+  $('fRot').addEventListener('input', e => { f.rotation = parseInt(e.target.value); $('fRotVal').textContent = f.rotation + '°'; upd(); });
+
+  $('fX').addEventListener('input', e => { f.x = parseFloat(e.target.value); upd(); });
+  $('fY').addEventListener('input', e => { f.y = parseFloat(e.target.value); upd(); });
+  $('fZ').addEventListener('input', e => { f.zIndex = parseInt(e.target.value); upd(); });
+  if ($('fW')) $('fW').addEventListener('input', e => { f.w = parseFloat(e.target.value); upd(); });
+  if ($('fH')) $('fH').addEventListener('input', e => { f.h = parseFloat(e.target.value); upd(); });
+
+  $('fLock').addEventListener('click', () => { f.locked = !f.locked; renderFieldEditor(); upd(); });
+  $('fDup').addEventListener('click', () => {
+    const newF = { ...f, id: 'f_' + Math.random().toString(36).slice(2,9), x: f.x + 3, y: f.y + 3 };
+    state.fields.push(newF); selectField(newF.id); renderAll();
+  });
+  $('fDelete').addEventListener('click', () => {
+    state.fields = state.fields.filter(x => x.id !== f.id);
+    state.selectedId = null; renderAll();
+  });
+  renderFieldList();
+}
+
+function addNewField() {
+  const newF = {
+    id: 'f_' + Math.random().toString(36).slice(2,9),
+    role: 'custom', text: 'NEW FIELD',
+    x: 50, y: 50, fontSize: 2.4, weight: 700, align: 'center',
+    color: state.textColor, rotation: 0, letterSpacing: 0,
+    locked: false, zIndex: 5,
+  };
+  state.fields.push(newF);
+  selectField(newF.id);
+  renderAll();
+}
+
+function renderFieldList() {
+  const list = $('fieldList'); if (!list) return;
+  list.innerHTML = '';
+  state.fields.forEach(f => {
+    const chip = document.createElement('button');
+    chip.className = 'field-chip' + (state.selectedId === f.id ? ' selected' : '');
+    chip.dataset.id = f.id;
+    chip.innerHTML = `<span class="chip-name">${escapeHtml((f.text || '(empty)').slice(0, 30))}</span><span class="chip-role">${f.role || ''}</span>`;
+    chip.addEventListener('click', () => selectField(f.id));
+    list.appendChild(chip);
+  });
+}
+
+// ---------- BACKGROUND ----------
+$('inpBgColor').addEventListener('input', e => { state.bgColor = e.target.value; $('inpBgColorHex').value = e.target.value; renderAll(); });
+$('inpBgColorHex').addEventListener('input', e => {
+  const v = e.target.value.trim();
+  if (/^#[0-9a-fA-F]{6}$/.test(v)) { state.bgColor = v; $('inpBgColor').value = v; renderAll(); }
+});
+$('inpBgImage').addEventListener('change', async e => {
+  const file = e.target.files[0]; if (!file) return;
+  state.bgImage = await fileToDataUrl(file); renderAll();
+});
+$('inpBgOpacity').addEventListener('input', e => {
+  state.bgOpacity = parseInt(e.target.value);
+  $('lblBgOpacity').textContent = state.bgOpacity + '%';
+  bgColorEl.style.opacity = state.bgOpacity / 100;
+  bgImageEl.style.opacity = state.bgOpacity / 100;
+});
+$('btnRemoveBg').addEventListener('click', () => { state.bgImage = null; renderAll(); });
+
+function renderSwatches() {
+  const c = $('bgSwatches'); c.innerHTML = '';
+  SWATCHES.forEach(col => {
+    const sw = document.createElement('button');
+    sw.className = 'swatch';
+    sw.style.background = col;
+    sw.title = col;
+    sw.addEventListener('click', () => {
+      state.bgColor = col;
+      $('inpBgColor').value = col;
+      $('inpBgColorHex').value = col;
+      renderAll();
+    });
+    c.appendChild(sw);
+  });
+}
+
+// ---------- PHOTO ----------
+$('inpPhoto').addEventListener('change', async e => {
+  const file = e.target.files[0]; if (!file) return;
+  state.photo = await fileToDataUrl(file); renderAll();
+});
+$('inpPhotoOpacity').addEventListener('input', e => {
+  state.photoOpacity = parseInt(e.target.value);
+  $('lblPhotoOpacity').textContent = state.photoOpacity + '%';
+  renderAll();
+});
+$('inpPhotoBlend').addEventListener('change', e => { state.photoBlend = e.target.value; renderAll(); });
+[['inpPhotoX','photoX'],['inpPhotoY','photoY'],['inpPhotoW','photoW'],['inpPhotoH','photoH']].forEach(([id,key]) => {
+  $(id).addEventListener('input', e => { state[key] = parseFloat(e.target.value); renderAll(); });
+});
+$('btnRemovePhoto').addEventListener('click', () => { state.photo = null; renderAll(); });
+
+function syncControls() {
+  $('inpBgColor').value = rgbToHex(state.bgColor);
+  $('inpBgColorHex').value = rgbToHex(state.bgColor);
+  $('inpBgOpacity').value = state.bgOpacity;
+  $('lblBgOpacity').textContent = state.bgOpacity + '%';
+  $('inpPhotoOpacity').value = state.photoOpacity;
+  $('lblPhotoOpacity').textContent = state.photoOpacity + '%';
+  $('inpPhotoBlend').value = state.photoBlend;
+  $('inpPhotoX').value = state.photoX;
+  $('inpPhotoY').value = state.photoY;
+  $('inpPhotoW').value = state.photoW;
+  $('inpPhotoH').value = state.photoH;
+  $('designName').value = state.designName;
+}
+
+// ---------- KEYBOARD ----------
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, textarea, [contenteditable="true"]')) return;
+  if (state.selectedId && (e.key === 'Delete' || e.key === 'Backspace')) {
+    state.fields = state.fields.filter(x => x.id !== state.selectedId);
+    state.selectedId = null; renderAll(); e.preventDefault();
+  }
+  if (state.selectedId && e.key === 'Enter') {
+    const f = state.fields.find(x => x.id === state.selectedId);
+    const fieldEl = document.querySelector(`.field[data-id="${state.selectedId}"]`);
+    const textEl = fieldEl?.querySelector('.field-text');
+    if (f && textEl && !f.locked) { enterEdit(fieldEl, f, textEl); e.preventDefault(); }
+  }
+  if (state.selectedId && ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) {
+    const f = state.fields.find(x => x.id === state.selectedId); if (!f) return;
+    const step = e.shiftKey ? 1 : 0.2;
+    if (e.key === 'ArrowUp') f.y -= step;
+    if (e.key === 'ArrowDown') f.y += step;
+    if (e.key === 'ArrowLeft') f.x -= step;
+    if (e.key === 'ArrowRight') f.x += step;
+    renderFields(); renderFieldEditor(); e.preventDefault();
+  }
+  if (e.key === 'Escape') {
+    state.selectedId = null; renderFields(); renderFieldEditor(); renderFieldList();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    saveCurrentDesign();
+  }
+});
+
+// ---------- SAVE / LOAD ----------
+const STORAGE_KEY = 'dubstubs_designs_v2';
+function loadAllSaved() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; } }
+function saveAllSaved(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+function snapshotState() {
+  return {
+    designName: state.designName,
+    themeKey: state.themeKey,
+    bgColor: state.bgColor, bgImage: state.bgImage, bgOpacity: state.bgOpacity,
+    photo: state.photo, photoOpacity: state.photoOpacity, photoBlend: state.photoBlend,
+    photoX: state.photoX, photoY: state.photoY, photoW: state.photoW, photoH: state.photoH,
+    fontFamily: state.fontFamily, textColor: state.textColor,
+    fields: state.fields,
+    savedAt: Date.now(),
+  };
+}
+function applySnapshot(snap) {
+  Object.assign(state, snap);
+  state.selectedId = null;
+  syncControls(); renderAll();
+}
+function renderSavedList() {
+  const all = loadAllSaved();
+  const list = $('savedList'); list.innerHTML = '';
+  const keys = Object.keys(all).sort((a,b) => (all[b].savedAt||0) - (all[a].savedAt||0));
+  $('savedCount').textContent = keys.length ? `${keys.length} design${keys.length===1?'':'s'}` : '';
+  if (!keys.length) {
+    list.innerHTML = `<div class="empty-msg"><span class="empty-icon">📁</span>No saved designs yet.<br><span style="font-size:11px;">Hit <kbd>⌘S</kbd> to save your first.</span></div>`;
+    return;
+  }
+  keys.forEach(k => {
+    const item = document.createElement('div');
+    item.className = 'saved-item';
+    const date = new Date(all[k].savedAt || 0);
+    const dateStr = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    const isDefault = !!all[k].isDefault;
+    item.innerHTML = `
+      <span class="saved-name">${isDefault ? '<span style="color:var(--accent);">★</span> ' : ''}${escapeHtml(k)}</span>
+      <span class="saved-date">${dateStr}</span>
+      <div class="saved-actions">
+        <button class="btn icon-only small" data-act="default" title="${isDefault ? 'Default — loads on app start. Click to unset.' : 'Set as default — loads on every app start'}" style="${isDefault ? 'color:var(--accent);' : ''}">${isDefault ? '★' : '☆'}</button>
+        <button class="btn small" data-act="load">Open</button>
+        <button class="btn icon-only small danger" data-act="del" title="Delete">×</button>
+      </div>`;
+    item.querySelector('[data-act="load"]').addEventListener('click', () => { applySnapshot(all[k]); toast('Loaded "' + k + '"'); });
+    item.querySelector('[data-act="default"]').addEventListener('click', () => {
+      const wasDefault = !!all[k].isDefault;
+      Object.keys(all).forEach(name => { all[name].isDefault = false; });
+      if (!wasDefault) all[k].isDefault = true;
+      saveAllSaved(all);
+      renderSavedList();
+      toast(wasDefault ? 'Default cleared — Ticketmaster Yellow will load next time' : `"${k}" set as default — loads on every app start`);
+    });
+    item.querySelector('[data-act="del"]').addEventListener('click', () => {
+      if (!confirm('Delete "' + k + '"?')) return;
+      delete all[k]; saveAllSaved(all); renderSavedList();
+    });
+    list.appendChild(item);
+  });
+}
+
+function saveCurrentDesign() {
+  const name = state.designName.trim() || 'Untitled';
+  const all = loadAllSaved();
+  if (all[name] && !confirm(`"${name}" already exists. Overwrite?`)) return;
+  state.designName = name;
+  const wasDefault = all[name]?.isDefault;
+  all[name] = snapshotState();
+  if (wasDefault) all[name].isDefault = true;
+  saveAllSaved(all);
+  renderSavedList();
+  toast('Saved "' + name + '"');
+}
+
+$('btnSave').addEventListener('click', saveCurrentDesign);
+$('btnNew').addEventListener('click', () => {
+  if (!confirm('Start a new ticket? Unsaved changes will be lost.')) return;
+  state.designName = 'Untitled';
+  loadTheme(state.themeKey, false);
+  syncControls();
+  toast('New ticket');
+});
+$('designName').addEventListener('input', e => { state.designName = e.target.value; });
+
+// ---------- EXPORT ----------
+$('btnExport').addEventListener('click', async () => {
+  const prevSel = state.selectedId;
+  state.selectedId = null; renderFields();
+  await new Promise(r => setTimeout(r, 50));
+  try {
+    const canvas = await html2canvas(ticket, { scale: 2, useCORS: true, backgroundColor: null });
+    const link = document.createElement('a');
+    link.download = (state.designName || 'dubstub') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    toast('Exported PNG');
+  } catch (err) { console.error(err); toast('Export failed — see console'); }
+  state.selectedId = prevSel; renderFields();
+});
+
+// ---------- AI BACKGROUND ----------
+const aiModal = $('aiModal');
+const aiPromptEl = $('aiPrompt');
+$('btnAiBg').addEventListener('click', () => {
+  const eventField = state.fields.find(f => f.role === 'eventName');
+  const venueField = state.fields.find(f => f.role === 'venue');
+  const themeName = THEMES[state.themeKey].name;
+  aiPromptEl.value = `${themeName.toLowerCase()} ticket stub background, themed around ${(eventField?.text || 'a band').trim()} at ${(venueField?.text || 'a venue').trim()}, atmospheric and textured, no text, no people, leaves room for typography in the center`;
+  aiModal.classList.add('open');
+});
+$('aiCancel').addEventListener('click', () => aiModal.classList.remove('open'));
+aiModal.addEventListener('click', e => { if (e.target === aiModal) aiModal.classList.remove('open'); });
+$('aiCopyPrompt').addEventListener('click', async () => {
+  await navigator.clipboard.writeText(aiPromptEl.value); toast('Prompt copied');
+});
+$('aiGenerate').addEventListener('click', async () => {
+  const prompt = aiPromptEl.value.trim(); if (!prompt) return;
+  aiModal.classList.remove('open');
+  toast('Generating background…');
+  const dataUrl = await generateAiBackground(prompt);
+  if (dataUrl) { state.bgImage = dataUrl; renderAll(); toast('Background applied'); }
+});
+
+/**
+ * STUB — WIRE THIS UP TO YOUR REAL API.
+ * Recommended: a tiny Cloudflare Worker that calls Replicate / OpenAI Images.
+ * Keep your API key on the server. Then from this client:
+ *   const r = await fetch('/api/generate', { method: 'POST', body: JSON.stringify({ prompt }) });
+ *   const { imageUrl } = await r.json();
+ *   return imageUrl;
+ */
+async function generateAiBackground(prompt) {
+  console.log('[generateAiBackground] would POST prompt to /api/generate:', prompt);
+  const c = document.createElement('canvas');
+  c.width = 1300; c.height = 462;
+  const ctx = c.getContext('2d');
+  const themeColors = {
+    'ticketmaster-yellow': ['#f5d547', '#d4a942', '#9a7820'],
+    'silver-dollar-lilac': ['#b1a8d8', '#6b6394', '#2a2540'],
+    'red-rocks-dark':      ['#0c0d3a', '#5a1623', '#d11a2c'],
+  };
+  const palette = themeColors[state.themeKey] || ['#888', '#555', '#222'];
+  const grad = ctx.createLinearGradient(0, 0, c.width, c.height);
+  grad.addColorStop(0, palette[0]);
+  grad.addColorStop(0.5, palette[1]);
+  grad.addColorStop(1, palette[2]);
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, c.width, c.height);
+  for (let i = 0; i < 8000; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.06})`;
+    ctx.fillRect(Math.random()*c.width, Math.random()*c.height, 2, 2);
+  }
+  ctx.font = '14px monospace';
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.fillText('[stub] ' + prompt.slice(0, 80), 20, c.height - 20);
+  return c.toDataURL('image/png');
+}
+
+// ---------- MOBILE PANEL ----------
+$('panelToggleMobile').addEventListener('click', () => {
+  document.getElementById('panel').classList.toggle('open');
+});
+$('panelHandle').addEventListener('click', () => {
+  document.getElementById('panel').classList.toggle('open');
+});
+
+// ---------- EXPORT THEME CODE ----------
+function exportCurrentAsThemeCode() {
+  const themeKey = state.themeKey;
+  const t = THEMES[themeKey] || {};
+  const fmt = v => typeof v === 'string' ? `'${v.replace(/'/g, "\\'")}'` : JSON.stringify(v);
+
+  const fieldLines = state.fields.map(f => {
+    const props = [];
+    props.push(`id: '${f.id}'`);
+    if (f.role) props.push(`role: '${f.role}'`);
+    if (f.type) props.push(`type: '${f.type}'`);
+    if (f.text != null) props.push(`text: ${fmt(f.text)}`);
+    props.push(`x: ${+(+f.x).toFixed(2)}`);
+    props.push(`y: ${+(+f.y).toFixed(2)}`);
+    if (f.fontSize != null) props.push(`fontSize: ${+(+f.fontSize).toFixed(2)}`);
+    if (f.weight) props.push(`weight: ${f.weight}`);
+    if (f.align) props.push(`align: '${f.align}'`);
+    if (f.vAlign) props.push(`vAlign: '${f.vAlign}'`);
+    if (f.rotation) props.push(`rotation: ${f.rotation}`);
+    if (f.letterSpacing) props.push(`letterSpacing: ${f.letterSpacing}`);
+    if (f.color) props.push(`color: '${f.color}'`);
+    if (f.zIndex && f.zIndex !== 5) props.push(`zIndex: ${f.zIndex}`);
+    if (f.w != null) props.push(`w: ${f.w}`);
+    if (f.h != null) props.push(`h: ${f.h}`);
+    if (f.locked) props.push(`locked: true`);
+    return `      { ${props.join(', ')} },`;
+  }).join('\n');
+
+  return `'${themeKey}': {
+    name: ${fmt(t.name || themeKey)},
+    desc: ${fmt(t.desc || 'Custom')},
+    thumb: ${fmt(t.thumb || 'linear-gradient(180deg, #888 0%, #444 100%)')},
+    bgColor: '${state.bgColor}',
+    bgImage: null,
+    photoLayer: null,
+    fontFamily: ${fmt(state.fontFamily)},
+    textColor: '${state.textColor}',
+    fields: [
+${fieldLines}
+    ]
+  },`;
+}
+
+document.getElementById('btnExportTheme').addEventListener('click', async () => {
+  const code = exportCurrentAsThemeCode();
+  try {
+    await navigator.clipboard.writeText(code);
+    toast('Theme code copied — paste into THEMES { } in the HTML');
+  } catch {
+    window.prompt('Copy this theme block and paste into the THEMES const:', code);
+  }
+});
+
+// ---------- HELPERS ----------
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function rgbToHex(c) {
+  if (!c) return '#000000';
+  if (c.startsWith('#')) return c.length === 7 ? c : c;
+  const m = c.match(/\d+/g);
+  if (!m || m.length < 3) return '#000000';
+  return '#' + m.slice(0,3).map(n => parseInt(n).toString(16).padStart(2,'0')).join('');
+}
+function toast(msg) {
+  $('toastMsg').textContent = msg;
+  $('toast').classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => $('toast').classList.remove('show'), 2200);
+}
+
+ticket.addEventListener('pointerdown', e => {
+  if (e.target === ticket || e.target === fieldsEl || e.target.classList.contains('bg-color') || e.target === bgColorEl) {
+    state.selectedId = null;
+    renderFields(); renderFieldEditor(); renderFieldList();
+  }
+});
+
+let resizeT;
+window.addEventListener('resize', () => {
+  applyScale();
+  clearTimeout(resizeT);
+  resizeT = setTimeout(() => { applyScale(); renderFields(); }, 80);
+});
+
+// ---------- BOOT ----------
+loadTheme('ticketmaster-yellow', false);
+renderSwatches();
+syncControls();
+setTab('design');
+
+(function loadDefaultDesignIfPresent() {
+  const all = loadAllSaved();
+  const def = Object.entries(all).find(([_, v]) => v && v.isDefault);
+  if (def) {
+    applySnapshot(def[1]);
+    setTimeout(() => toast(`Loaded default: "${def[0]}"`), 250);
+  }
+})();
+renderSavedList();
+applyScale();
+window.requestAnimationFrame(() => { applyScale(); });
+</script>
+</body>
+</html>

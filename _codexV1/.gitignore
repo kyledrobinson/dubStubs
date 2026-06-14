@@ -1,0 +1,14 @@
+# _codexV1/.gitignore
+# Keeps local secrets, generated files, and cPanel-only runtime artifacts out of git.
+# This file is not a substitute for storing production secrets outside public_html.
+
+.env
+.env.*
+!.env.example
+*.env
+!*.env.example
+api/replicate.env
+private/
+img/uploads/
+*.log
+
